@@ -82,7 +82,12 @@ std::pair<float, float> HActor::getActorWorldLocation()
 
 void HActor::setActorWorldLocation(float x, float y)
 {
-    rootComponent->setComponentLocalLocation({float(x), float(y)});
+    rootComponent->setComponentLocalLocation({x, y});
+}
+
+void HActor::setActorWorldScale(const float x, const float y)
+{
+    rootComponent->setComponentLocalScale({x, y});
 }
 
 float HActor::getActorWorldRotation()

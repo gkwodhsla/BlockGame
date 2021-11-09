@@ -5,7 +5,7 @@
 
 HPlayerController::HPlayerController(HPawn* controlledPawn)
 {
-
+    this->controlledPawn = controlledPawn;
 }
 
 HPlayerController::~HPlayerController()
@@ -35,18 +35,6 @@ INPUT_MODE HPlayerController::getInputMode()
 
 void HPlayerController::handleEvent(const Event& e)
 {
-    switch(e.type)
-    {
-        case EVENT_TYPE::FINGER_DOWN:
-            PRINT_LOG("finger down");
-            break;
-        case EVENT_TYPE::FINGER_UP:
-            PRINT_LOG("finger up");
-            break;
-        case EVENT_TYPE::FINGER_SWIPE:
-            PRINT_LOG("finger swipe");
-            break;
-    }
     if(controlledPawn)
     {
         controlledPawn->handleEvent(e);

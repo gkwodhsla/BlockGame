@@ -20,7 +20,15 @@ Camera2DComponent::~Camera2DComponent()
 
 void Camera2DComponent::setProgramViewProjectionMat(GLuint programID)
 {
-    glm::mat4 cameraTransform = glm::lookAt(eye, at, up);
+    glm::mat4 cameraTransform = glm::mat4(1.0f);
+    if(isSightFixed)
+    {
+        cameraTransform = glm::lookAt(eye, at, up);
+    }
+    else
+    {
+        cameraTransform = glm::lookAt(eye, glm::vec3{eye.x, eye.y, 0.0f}, up);
+    }
     auto cameraTransLoc = glGetUniformLocation(programID, "cameraTrans");
     glUniformMatrix4fv(cameraTransLoc, 1, GL_FALSE, glm::value_ptr(cameraTransform));
 
@@ -49,4 +57,9 @@ void Camera2DComponent::changeCameraOuterProperty(const glm::vec3 &eye, const gl
 void Camera2DComponent::activate()
 {
     frameworkInst->curRenderer->setCamera(this);
+}
+
+void Camera2DComponent::setIsSightFixed(bool isFixed)
+{
+    isSightFixed = isFixed;
 }

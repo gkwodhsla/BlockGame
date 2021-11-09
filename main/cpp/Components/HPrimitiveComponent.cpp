@@ -1,5 +1,11 @@
 #include "HPrimitiveComponent.h"
+#include "../Common/Framework.h"
+#include "../Common/Renderer.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/ext.hpp>
 HPrimitiveComponent::HPrimitiveComponent()
 {
 
@@ -18,20 +24,19 @@ void HPrimitiveComponent::update(const float deltaTime)
 void HPrimitiveComponent::render()
 {
     HSceneComponent::render();
+
+    glm::mat4 worldTransform = glm::translate(glm::mat4(1.0f),
+                                              glm::vec3(worldLocation.first,worldLocation.second,0.0f));
+    worldTransform *= glm::rotate(glm::mat4(1.0f), glm::radians(worldRotation), glm::vec3(0.0f,0.0f,1.0f));
+    worldTransform *= glm::scale(glm::mat4(1.0f),
+                                 glm::vec3(worldScale.first,worldScale.second,0.0f));
+    auto worldTransLoc = glGetUniformLocation(Framework::curRenderer->getProgramID(), "worldTrans");
+    glUniformMatrix4fv(worldTransLoc, 1, GL_FALSE, glm::value_ptr(worldTransform));
 }
 
 void HPrimitiveComponent::setVisibility(const bool isVisible)
 {
     visibility = isVisible;
-}
-
-void HPrimitiveComponent::setScale(const std::pair<float, float>& scale)
-{
-    this->scale = scale;
-}
-std::pair<float, float> HPrimitiveComponent::getScale()
-{
-    return scale;
 }
 
 bool HPrimitiveComponent::getVisibility()

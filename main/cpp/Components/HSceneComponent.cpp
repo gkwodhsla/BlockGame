@@ -134,13 +134,61 @@ void HSceneComponent::attachTo(HSceneComponent* component, bool isAffectFromPare
                                        parentWorldLocation.second + localLocation.second);
 
         worldRotation = component->getComponentWorldRotation() + localRotation;
+
+        auto parentWorldScale = component->getComponentWorldScale();
+        worldScale = std::make_pair(parentWorldScale.first + localScale.first,
+                                    parentWorldScale.second + localScale.second);
     }
     else
     {
         worldLocation = std::make_pair(localLocation.first, localLocation.second);
         worldRotation = localRotation;
+        worldScale = localScale;
     }
     setAffectLocationFromParent(isAffectFromParent);
     setAffectRotationFromParent(isAffectFromParent);
+}
+
+void HSceneComponent::updateComponentWorldScale()
+{
+    if(parent && isUsingParentScale)
+    {
+        worldScale.first = localScale.first + parent->getComponentWorldScale().first;
+        worldScale.second = localScale.first + parent->getComponentWorldScale().second;
+    }
+    else if(!parent || (parent && !isUsingParentRotation)) //부모가 없다면 루트 컴포넌트이다.
+    {
+        worldScale = localScale;
+    }
+    for(auto& child:children)
+    {
+        child->updateComponentWorldScale();
+    }
+}
+
+std::pair<float, float> HSceneComponent::getComponentWorldScale()
+{
+    return worldScale;
+}
+
+std::pair<float, float> HSceneComponent::getComponentLocalScale()
+{
+    return localScale;
+}
+
+void HSceneComponent::setComponentLocalScale(const std::pair<float, float> &scale)
+{
+    localScale = scale;
+    updateComponentWorldScale();
+}
+
+void HSceneComponent::setAffectScaleFromParent(const bool isAffect)
+{
+    isUsingParentScale = isAffect;
+}
+
+bool HSceneComponent::getAffectScaleFromParent()
+{
+    return isUsingParentScale;
 }
 

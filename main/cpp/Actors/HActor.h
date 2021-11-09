@@ -43,6 +43,7 @@ public:
     void setActorDirectionalVector(const glm::vec2& newDir);
     std::pair<float, float> getActorWorldLocation();
     void setActorWorldLocation(const float x, const float y);
+    void setActorWorldScale(const float x, const float y);
     float getActorWorldRotation();
     void setActorTickable(const bool isTickable);
     bool getActorTickable();

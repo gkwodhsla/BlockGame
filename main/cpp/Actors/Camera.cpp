@@ -7,11 +7,15 @@ Camera::Camera()
                                        {0.0f,0.0f,0.0f},{0.0f,1.0f,0.0f});
     cameraComp->attachTo(rootComponent);
     cameraComp->setOwner(this);
-    cameraComp->activate();
 }
 
 Camera::~Camera()
 {
     delete cameraComp;
     cameraComp = nullptr;
+}
+
+void Camera::activateCamera()
+{
+    cameraComp->activate();
 }

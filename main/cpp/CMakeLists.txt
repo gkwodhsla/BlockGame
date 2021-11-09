@@ -22,6 +22,7 @@ add_library(gles3jni SHARED
         Actors/HActor.cpp
         Actors/HPawn.cpp
         Actors/Camera.cpp
+        Actors/Bouncer.cpp
         Common/HObject.cpp
         Common/program.cpp
         Common/renderer.cpp

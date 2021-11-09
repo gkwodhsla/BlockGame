@@ -3,8 +3,8 @@
 #include <android/log.h>
 #include <cstdlib>
 
-#define PRINT_LOG(str) \
-__android_log_print(ANDROID_LOG_INFO, "gles log" ,"%s", str);
+#define PRINT_LOG(str, type) \
+__android_log_print(ANDROID_LOG_INFO, "gles log" ,#type, str);
 
 namespace GlobalFunction
 {

@@ -31,9 +31,11 @@ void HLevelBase::handleEvent(const Event& e)
     {
         case INPUT_MODE::BOTH:
             curController->handleEvent(e);
+            //추후 UI 추가시 코드 삽입
             break;
 
         case INPUT_MODE::UI_ONLY:
+            //추후 UI 추가시 코드 삽입
             break;
 
         case INPUT_MODE::GAME_ONLY:

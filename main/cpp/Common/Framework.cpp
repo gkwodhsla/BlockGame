@@ -28,16 +28,6 @@ GLuint Framework::screenWidth = 0;
 GLuint Framework::screenHeight = 0;
 Framework* frameworkInst = nullptr;
 
-float rect[] =
-{
-        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-        0.5f, -0.5f, 0.0f, 1.0f, 0.0f,//아래 사각형
-        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-        0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-        0.5f, 0.5f, 0.0f, 1.0f, 1.0f//위에 사각형
-};
-
 Framework::~Framework()
 {
     if(instance)
@@ -85,7 +75,6 @@ void Framework::handleEvent()
     while(!eventQ->isEmpty())
     {
         curLevel->handleEvent(*eventQ->pollEvent());
-        PRINT_LOG("poll event");
     }
 }
 
@@ -139,7 +128,7 @@ GLuint Framework::createPngTexture(const char* filePath)
     unsigned error = lodepng::decode(image, width, height, data);
     if (error != 0)
     {
-        PRINT_LOG(lodepng_error_text(error));
+        PRINT_LOG(lodepng_error_text(error), %s);
         return -1;
     }
 

@@ -31,7 +31,6 @@ GLuint Program::compileShader(GLenum shaderType, const char *sourceLoc)
     size_t fileSize = AAsset_getLength(shaderCode);
     buffer = new char[fileSize + 1];
     memset(buffer,0,fileSize+1);
-    PRINT_LOG(buffer);
     AAsset_read(shaderCode, buffer, fileSize);
     AAsset_close(shaderCode);
 
@@ -57,7 +56,7 @@ GLuint Program::compileShader(GLenum shaderType, const char *sourceLoc)
             if(buf)
             {
                 glGetShaderInfoLog(shader, infoLen, nullptr, buf);
-                PRINT_LOG(buf);
+                PRINT_LOG(buf, %s);
                 delete[] buf;
                 buf = nullptr;
             }
@@ -94,7 +93,7 @@ GLuint Program::createProgram(GLuint VSID, GLuint FSID)
             char *buf = new char[bufLen];
             if(buf)
             {
-                PRINT_LOG(buf);
+                PRINT_LOG(buf, %s);
                 delete[] buf;
                 buf = nullptr;
             }

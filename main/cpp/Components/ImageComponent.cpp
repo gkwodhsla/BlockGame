@@ -75,7 +75,7 @@ GLuint ImageComponent::createTexture(const char *filePath, const bool isCreateMi
     GLuint error = lodepng::decode(image, width, height, data);
     if (error != 0)
     {
-        PRINT_LOG(lodepng_error_text(error));
+        PRINT_LOG(lodepng_error_text(error), %s);
         return -1;
     }
 
@@ -102,6 +102,7 @@ GLuint ImageComponent::createTexture(const char *filePath, const bool isCreateMi
 
 void ImageComponent::render()
 {
+    HPrimitiveComponent::render();
     auto uniformLoc = glGetUniformLocation(frameworkInst->curRenderer->getProgramID(), "uTexCoord");
     glUniform1i(uniformLoc, 0); //여기 0은 GL_TEXTURE0을 의미한다. 텍스처슬롯!
     glActiveTexture(GL_TEXTURE0);

@@ -17,8 +17,11 @@ public:
     void changeCameraInnerProperty(const float left, const float right, const float bottom, const float top);
     void changeCameraOuterProperty(const glm::vec3& eye, const glm::vec3& at, const glm::vec3& up);
     void activate();
+    void setIsSightFixed(bool isFixed);
+    //시선이 고정되면 카메라가 움직여도 AT만 바라보지만 고정X라면 EYE에 따라 at이 바뀐다.
 
 private:
+    bool isSightFixed = true;
     float left;
     float right;
     float bottom;
