@@ -35,4 +35,12 @@ namespace GlobalFunction
             return nullptr;
         }
     }
+
+    template<typename T, typename ...Types>
+    static T* createNewObject(Types ...args)
+    {
+        T* newItem = new T(args...);
+        newItem->setID(GlobalFunction::GetClassTypeUniqueID<T>());
+        return newItem;
+    }
 }

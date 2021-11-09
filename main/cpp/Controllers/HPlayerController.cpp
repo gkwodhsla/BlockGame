@@ -1,6 +1,7 @@
 #include "HPlayerController.h"
 #include "../Actors/HPawn.h"
 #include "../Common/Common.h"
+#include "../Common/EventQ.h"
 
 HPlayerController::HPlayerController(HPawn* controlledPawn)
 {
@@ -36,13 +37,13 @@ void HPlayerController::handleEvent(const Event& e)
 {
     switch(e.type)
     {
-        case EventType::FINGER_DOWN:
+        case EVENT_TYPE::FINGER_DOWN:
             PRINT_LOG("finger down");
             break;
-        case EventType::FINGER_UP:
+        case EVENT_TYPE::FINGER_UP:
             PRINT_LOG("finger up");
             break;
-        case EventType::FINGER_SWIPE:
+        case EVENT_TYPE::FINGER_SWIPE:
             PRINT_LOG("finger swipe");
             break;
     }

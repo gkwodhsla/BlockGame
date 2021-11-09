@@ -23,8 +23,7 @@ public:
     template<typename T, typename ...Types>
     T* spawnActor(Types ...args)
     {
-        T* newItem = new T(args...);
-        newItem->setID(GlobalFunction::GetClassTypeUniqueID<T>());
+        T* newItem = GlobalFunction::createNewObject<T>(args...);
         actors.emplace_back(newItem);
         return newItem;
     }

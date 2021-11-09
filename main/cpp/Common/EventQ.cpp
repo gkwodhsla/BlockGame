@@ -6,7 +6,7 @@ yPos(other.yPos)
 
 }
 
-Event::Event(EventType type, float x, float y):type(type), xPos(x), yPos(y)
+Event::Event(EVENT_TYPE type, float x, float y):type(type), xPos(x), yPos(y)
 {
 
 }

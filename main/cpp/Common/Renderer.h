@@ -4,6 +4,7 @@
 #include <bitset>
 
 class Program;
+class Camera2DComponent;
 
 class Renderer
 {
@@ -21,11 +22,13 @@ public:
     void addClearBit(const GLbitfield bit);
     void eraseClearBit(const GLbitfield bit);
     void changeProgram(const char* VSPath, const char* FSPath);
-    void clearRenderer();
+    void setCamera(Camera2DComponent*);
+    void readyToDraw();
     const GLuint inline getProgramID() const {return programID;}
 
 private:
     std::vector<GLuint> clearBits;
     Program* curProgram = nullptr;
+    Camera2DComponent* curCamera = nullptr;
     GLuint programID = 0;
 };

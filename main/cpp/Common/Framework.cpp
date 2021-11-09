@@ -96,16 +96,16 @@ void Framework::update(const float deltaTime)
 
 void Framework::render()
 {
-    curRenderer->clearRenderer();
+    curRenderer->readyToDraw();
+    curLevel->render();
 
-    glm::mat4 worldTransform = glm::translate(glm::mat4(1.0f),glm::vec3(100.f,0.0f,0.0f));
-    worldTransform *= glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(0.0f,0.0f,1.0f));
-    worldTransform *= glm::scale(glm::mat4(1.0f), glm::vec3(300.0f,300.0f,300.0f));
-    auto worldTransLoc = glGetUniformLocation(curRenderer->getProgramID(), "worldTrans");
-    glUniformMatrix4fv(worldTransLoc, 1, GL_FALSE, glm::value_ptr(worldTransform));
+    //glm::mat4 worldTransform = glm::translate(glm::mat4(1.0f),glm::vec3(100.f,0.0f,0.0f));
+    //worldTransform *= glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(0.0f,0.0f,1.0f));
+    //worldTransform *= glm::scale(glm::mat4(1.0f), glm::vec3(300.0f,300.0f,300.0f));
+    //auto worldTransLoc = glGetUniformLocation(curRenderer->getProgramID(), "worldTrans");
+    //glUniformMatrix4fv(worldTransLoc, 1, GL_FALSE, glm::value_ptr(worldTransform));
 
-
-    glm::mat4 cameraTransform = glm::lookAt(glm::vec3(0.0f,0.0f,10.0f),
+    /*glm::mat4 cameraTransform = glm::lookAt(glm::vec3(0.0f,0.0f,10.0f),
                                          glm::vec3(0.0f,0.0f,0.0f),
                                          glm::vec3(0.0f,1.0f,0.0f));
     auto cameraTransLoc = glGetUniformLocation(curRenderer->getProgramID(), "cameraTrans");
@@ -113,11 +113,11 @@ void Framework::render()
 
     glm::mat4 projTransform = glm::ortho(-400.0f, 400.0f,-400.0f,400.0f,0.1f,100.0f);
     auto projTransLoc = glGetUniformLocation(curRenderer->getProgramID(), "projTrans");
-    glUniformMatrix4fv(projTransLoc, 1, GL_FALSE, glm::value_ptr(projTransform));
+    glUniformMatrix4fv(projTransLoc, 1, GL_FALSE, glm::value_ptr(projTransform));*/
 
 
-    auto uniformLoc = glGetUniformLocation(curRenderer->getProgramID(), "uTexCoord");
-    glUniform1i(uniformLoc, 0); //여기 0은 GL_TEXTURE0을 의미한다. 텍스처슬롯!
+    //auto uniformLoc = glGetUniformLocation(curRenderer->getProgramID(), "uTexCoord");
+    //glUniform1i(uniformLoc, 0); //여기 0은 GL_TEXTURE0을 의미한다. 텍스처슬롯!
 
     //씬 렌더링 그리기 전에 update를 호출해야 한다.
     //그러니까 es의 view renderer에서 onDrawFrame이 호출되면 호출되는 함수를 지정해놓고 해당 함수에서 작업을 하게끔!
@@ -215,7 +215,7 @@ Java_com_example_blockgame_GLESNativeLib_touchEventStart(JNIEnv *env, jobject ob
 {
     Framework::conversionCoordToGLCoordSystem(x, y);
     //위 변환 과정을 통해 openGL의 좌표계 범위와 일치시켜준다.
-    Event newEvent(EventType::FINGER_DOWN, x, y);
+    Event newEvent(EVENT_TYPE::FINGER_DOWN, x, y);
     frameworkInst->eventQ->pushEvent(newEvent);
 }
 
@@ -223,13 +223,13 @@ JNIEXPORT void JNICALL
 Java_com_example_blockgame_GLESNativeLib_touchEventMove(JNIEnv *env, jobject obj, float x, float y)
 {
     Framework::conversionCoordToGLCoordSystem(x, y);
-    Event newEvent(EventType::FINGER_SWIPE, x, y);
+    Event newEvent(EVENT_TYPE::FINGER_SWIPE, x, y);
     frameworkInst->eventQ->pushEvent(newEvent);
 }
 JNIEXPORT void JNICALL
 Java_com_example_blockgame_GLESNativeLib_touchEventRelease(JNIEnv *env, jobject obj, float x, float y)
 {
     Framework::conversionCoordToGLCoordSystem(x, y);
-    Event newEvent(EventType::FINGER_UP, x, y);
+    Event newEvent(EVENT_TYPE::FINGER_UP, x, y);
     frameworkInst->eventQ->pushEvent(newEvent);
 }

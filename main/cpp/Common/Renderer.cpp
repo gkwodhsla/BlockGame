@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "Program.h"
+#include "../Components/Camera2DComponent.h"
 
 Renderer::Renderer(const char *VSPath, const char *FSPath)
 {
@@ -60,10 +61,16 @@ void Renderer::changeProgram(const char *VSPath, const char *FSPath)
     programID = curProgram->programID;
 }
 
-void Renderer::clearRenderer()
+void Renderer::setCamera(Camera2DComponent* camera)
+{
+    curCamera = camera;
+}
+
+void Renderer::readyToDraw()
 {
     for(auto&val : clearBits)
     {
         glClear(val);
     }
+    curCamera->setProgramViewProjectionMat(programID);
 }

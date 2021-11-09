@@ -2,7 +2,7 @@
 #include <queue>
 #include <memory>
 
-enum class EventType
+enum class EVENT_TYPE
 {
     FINGER_DOWN,
     FINGER_UP,
@@ -15,10 +15,10 @@ public:
     Event() = delete;
     Event(const Event&);
     Event&operator=(const Event&) = delete;
-    Event(EventType type, float x, float y);
+    Event(EVENT_TYPE type, float x, float y);
 
 public:
-    const EventType type;
+    const EVENT_TYPE type;
     float xPos = 0.0f;
     float yPos = 0.0f;
 };

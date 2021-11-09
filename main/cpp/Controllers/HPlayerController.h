@@ -1,9 +1,10 @@
 #pragma once
 
 #include "../Common/HObject.h"
-#include "../Common/EventQ.h"
 
 class HPawn;
+
+class Event;
 
 enum class INPUT_MODE
 {
