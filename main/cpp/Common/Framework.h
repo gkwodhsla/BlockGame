@@ -6,6 +6,8 @@
 class Renderer;
 class AAssetManager;
 class HActor;
+class EventQ;
+class HLevelBase;
 
 class Framework final //상속을 방지하고, 싱글톤 패턴적용
 {
@@ -20,6 +22,7 @@ public:
     static void handleEvent();
     static void update(const float deltaTime);
     static void render();
+    static void changeLevel(HLevelBase* level);
     static GLuint createPngTexture(const char*);
     static inline void conversionCoordToGLCoordSystem(float &x, float &y)
     {
@@ -31,6 +34,7 @@ public:
         y /= ratioY;
         y += 1.0f;
     }
+    //스크린 좌표계에서 openGL 정규 좌표계로 변경
 
 private:
     Framework();
@@ -38,15 +42,12 @@ private:
 public:
     static AAssetManager* assetMng;
     static Renderer* curRenderer;
+    static EventQ* eventQ; //singleton
+    static HLevelBase* curLevel;
     static GLuint screenWidth;
     static GLuint screenHeight;
 private:
     static Framework* instance;
-    //추후에 레벨 클래스가 추가.
-    static GLuint VAO[2];
-    static GLuint VBO[2];
-    static GLuint texture;
-    static HActor* testActor;
 };
 
 extern Framework* frameworkInst;

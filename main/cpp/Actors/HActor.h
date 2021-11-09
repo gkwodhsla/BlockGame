@@ -27,7 +27,7 @@ public:
     HActor();
     HActor(const HActor&) = delete;
     HActor&operator=(const HActor&) = delete;
-    virtual ~HActor() ;
+    virtual ~HActor() = 0;
 
 public:
     void moveTo(const std::pair<float, float>& loc);
@@ -77,5 +77,4 @@ protected:
 private:
     std::vector<HComponent*> actorComponents;
     GLuint VAO;
-    ImageComponent* testComponent = nullptr;
 };

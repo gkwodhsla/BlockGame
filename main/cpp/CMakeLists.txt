@@ -18,15 +18,20 @@ set(OPENGL_LIB GLESv3) #버전3만 지원
 add_subdirectory(glm-master) #재귀적으로 CMakeLists 사용
 
 add_library(gles3jni SHARED
+        Actors/HActor.cpp
+        Actors/HPawn.cpp
         Common/HObject.cpp
         Common/program.cpp
         Common/renderer.cpp
         Common/framework.cpp
         Common/lodepng/lodepng.cpp
-        Actors/HActor.cpp
+        Common/EventQ.cpp
         Components/HPrimitiveComponent.cpp
         Components/HSceneComponent.cpp
         Components/ImageComponent.cpp
+        Controllers/HPlayerController.cpp
+        Levels/HLevelBase.cpp
+        Levels/MainLevel.cpp
         )
 
 # Include libraries needed for gles3jni lib

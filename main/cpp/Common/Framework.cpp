@@ -1,7 +1,9 @@
 #include "Framework.h"
 #include "Renderer.h"
 #include "Common.h"
+#include "EventQ.h"
 #include "../Actors/HActor.h"
+#include "../Levels/MainLevel.h"
 
 
 #include <GLES3/gl3.h>
@@ -20,13 +22,11 @@
 AAssetManager* Framework::assetMng = nullptr;
 Framework* Framework::instance = nullptr;
 Renderer* Framework::curRenderer = nullptr;
-GLuint Framework::VAO[2] = {0, 0};
-GLuint Framework::VBO[2] = {0, 0};
+EventQ* Framework::eventQ = nullptr;
+HLevelBase* Framework::curLevel = nullptr;
 GLuint Framework::screenWidth = 0;
 GLuint Framework::screenHeight = 0;
-GLuint Framework::texture = 0;
 Framework* frameworkInst = nullptr;
-HActor* Framework::testActor = nullptr;
 
 float rect[] =
 {
@@ -52,7 +52,11 @@ Framework::~Framework()
         curRenderer = nullptr;
     }
 
-    glDeleteBuffers(2, VBO);
+    if(curLevel)
+    {
+        delete curLevel;
+        curLevel = nullptr;
+    }
 }
 
 Framework *Framework::getInstance()
@@ -71,45 +75,28 @@ void Framework::init(const char* VSPath, const char* FSPath)
     curRenderer->addClearBit(GL_DEPTH_BUFFER_BIT);
     curRenderer->enableGLFeature(GL_DEPTH_TEST);
 
-    testActor=new HActor();
-
-    /*glGenVertexArrays(2, VAO);
-    glGenBuffers(2, VBO);
-
-    glBindVertexArray(VAO[0]);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(rect), rect, GL_STATIC_DRAW);
-
-
-    GLuint attribLoc = glGetAttribLocation(curRenderer->getProgramID(), "position");
-    glEnableVertexAttribArray(attribLoc);
-    glVertexAttribPointer(attribLoc, 3, GL_FLOAT, GL_FALSE,sizeof(float)*5, (GLvoid*)0);
-
-    GLuint attribLoc2 = glGetAttribLocation(curRenderer->getProgramID(), "inputTexPos");
-    glEnableVertexAttribArray(attribLoc2);
-    glVertexAttribPointer(attribLoc2, 2, GL_FLOAT, GL_FALSE, sizeof(float)*5,(GLvoid*)(sizeof(float)*3));
-    //여기까지 사각형 데이터 생성
-
-    glBindVertexArray(0);
-
-    texture = createPngTexture("images/logo.png");*/
+    curLevel = new MainLevel();
+    eventQ = EventQ::getInstance();
 
 }
 
 void Framework::handleEvent()
 {
-    //추후에 추가
+    while(!eventQ->isEmpty())
+    {
+        curLevel->handleEvent(*eventQ->pollEvent());
+        PRINT_LOG("poll event");
+    }
 }
 
 void Framework::update(const float deltaTime)
 {
-    //씬 업데이트
+    curLevel->update(deltaTime);
 }
 
 void Framework::render()
 {
     curRenderer->clearRenderer();
-
 
     glm::mat4 worldTransform = glm::translate(glm::mat4(1.0f),glm::vec3(100.f,0.0f,0.0f));
     worldTransform *= glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(0.0f,0.0f,1.0f));
@@ -131,12 +118,6 @@ void Framework::render()
 
     auto uniformLoc = glGetUniformLocation(curRenderer->getProgramID(), "uTexCoord");
     glUniform1i(uniformLoc, 0); //여기 0은 GL_TEXTURE0을 의미한다. 텍스처슬롯!
-
-    testActor->render();
-    //glActiveTexture(GL_TEXTURE0);
-    //glBindTexture(GL_TEXTURE_2D, texture);
-    //glBindVertexArray(VAO[0]);
-    //glDrawArrays(GL_TRIANGLES,0,6);
 
     //씬 렌더링 그리기 전에 update를 호출해야 한다.
     //그러니까 es의 view renderer에서 onDrawFrame이 호출되면 호출되는 함수를 지정해놓고 해당 함수에서 작업을 하게끔!
@@ -175,6 +156,16 @@ GLuint Framework::createPngTexture(const char* filePath)
     return temp;
 }
 
+void Framework::changeLevel(HLevelBase* level)
+{
+    if(curLevel)
+    {
+        delete curLevel;
+        curLevel = nullptr;
+    }
+    curLevel = level;
+}
+
 Framework::Framework()
 {
 
@@ -207,6 +198,8 @@ Java_com_example_blockgame_GLESNativeLib_resize(JNIEnv* env, jobject obj, jint w
 JNIEXPORT void JNICALL
 Java_com_example_blockgame_GLESNativeLib_draw(JNIEnv* env, jobject obj)
 {
+    frameworkInst->handleEvent();
+    frameworkInst->update(0.016f);
     frameworkInst->render();
 }
 
@@ -222,25 +215,21 @@ Java_com_example_blockgame_GLESNativeLib_touchEventStart(JNIEnv *env, jobject ob
 {
     Framework::conversionCoordToGLCoordSystem(x, y);
     //위 변환 과정을 통해 openGL의 좌표계 범위와 일치시켜준다.
-    std::string msg = "Touch Start: " + std::to_string(x) + ", " + std::to_string(y);
-    PRINT_LOG(msg.c_str());
+    Event newEvent(EventType::FINGER_DOWN, x, y);
+    frameworkInst->eventQ->pushEvent(newEvent);
 }
 
 JNIEXPORT void JNICALL
 Java_com_example_blockgame_GLESNativeLib_touchEventMove(JNIEnv *env, jobject obj, float x, float y)
 {
     Framework::conversionCoordToGLCoordSystem(x, y);
-
-    //위 변환 과정을 통해 openGL의 좌표계 범위와 일치시켜준다.
-    std::string msg = "Touch Move: " + std::to_string(x) + ", " + std::to_string(y);
-    PRINT_LOG(msg.c_str());
+    Event newEvent(EventType::FINGER_SWIPE, x, y);
+    frameworkInst->eventQ->pushEvent(newEvent);
 }
 JNIEXPORT void JNICALL
 Java_com_example_blockgame_GLESNativeLib_touchEventRelease(JNIEnv *env, jobject obj, float x, float y)
 {
     Framework::conversionCoordToGLCoordSystem(x, y);
-
-    //위 변환 과정을 통해 openGL의 좌표계 범위와 일치시켜준다.
-    std::string msg = "Touch End: " + std::to_string(x) + ", " + std::to_string(y);
-    PRINT_LOG(msg.c_str());
+    Event newEvent(EventType::FINGER_UP, x, y);
+    frameworkInst->eventQ->pushEvent(newEvent);
 }

@@ -12,8 +12,6 @@ HActor::HActor()
     rootComponent = new HSceneComponent();
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
-    testComponent = new ImageComponent("images/brick.png");
-    testComponent->attachTo(rootComponent);
     //VAO가 바인딩 됐기 때문에 해당 액터의 컴포넌트에 VBO가 있다면 들러붙는다.
 
     //destroyAction = [this]()
@@ -39,7 +37,6 @@ HActor::~HActor()
         glDeleteVertexArrays(1, &VAO);
         VAO = 0;
     }
-    delete testComponent;
 }
 
 void HActor::moveTo(const std::pair<float, float> &loc)
