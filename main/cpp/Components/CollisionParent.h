@@ -3,7 +3,8 @@
 #include <functional>
 
 class HActor;
-
+class BoxCollisionComponent;
+class CircleCollisionComponent;
 class CollisionParent: public HSceneComponent
 {
 public:
@@ -17,4 +18,7 @@ public:
     std::function<void(HActor*)> collisionResponse = nullptr;
     void registerCollisionResponse(const std::function<void(HActor*)>& func);
     bool isPointInCircle(float cx, float cy, float cr, float px, float py);
+    bool isRectIntersect(BoxCollisionComponent*, BoxCollisionComponent*);
+    bool isCircleIntersect(CircleCollisionComponent*, CircleCollisionComponent*);
+    bool isRectAndCircleIntersect(BoxCollisionComponent*, CircleCollisionComponent*);
 };

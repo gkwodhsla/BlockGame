@@ -18,23 +18,19 @@ void CircleCollisionComponent::checkCollision(const CollisionParent& otherCollis
 {
     if(GlobalFunction::Cast<CircleCollisionComponent>(&otherCollisionComp))
     {
-        auto other = GlobalFunction::Cast<CircleCollisionComponent>(&otherCollisionComp);
-        auto otherLoc = other->getComponentWorldLocation();
-        auto thisLoc = this->getComponentWorldLocation();
-
-        float dx = otherLoc.first - thisLoc.first;
-        float dy = otherLoc.second - thisLoc.second;
-
-        float dist = sqrt(dx*dx +dy*dy);
-        if(dist <= other->radius+radius)
+        if(isCircleIntersect(this, GlobalFunction::Cast<CircleCollisionComponent>(&otherCollisionComp)))
         {
-            collisionResponse(other->getOwner());
-            other->collisionResponse(this->getOwner());
+            collisionResponse(otherCollisionComp.getOwner());
+            otherCollisionComp.collisionResponse(this->getOwner());
         }
     }
     else if(GlobalFunction::Cast<BoxCollisionComponent>(&otherCollisionComp))
     {
-
+        if(isRectAndCircleIntersect(GlobalFunction::Cast<BoxCollisionComponent>(&otherCollisionComp), this))
+        {
+            collisionResponse(otherCollisionComp.getOwner());
+            otherCollisionComp.collisionResponse(this->getOwner());
+        }
     }
 
 
