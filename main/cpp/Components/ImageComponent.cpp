@@ -16,7 +16,7 @@ float ImageComponent::rect[] =
                 0.5f, 0.5f, 0.0f, 1.0f, 1.0f//위에 사각형
         };
 
-ImageComponent::ImageComponent(const char *filePath, const bool isCreateMipmap, GLbitfield magFilter,
+ImageComponent::ImageComponent(const char *filePath, HActor*owner, const bool isCreateMipmap, GLbitfield magFilter,
                                GLbitfield minFilter, const GLbitfield wrappingModeS, const GLbitfield wrappingModeT)
 {
     textureID = createTexture(filePath, isCreateMipmap, magFilter, minFilter, wrappingModeS, wrappingModeT);
@@ -37,6 +37,8 @@ ImageComponent::ImageComponent(const char *filePath, const bool isCreateMipmap, 
     glVertexAttribPointer(attribLoc2, 2, GL_FLOAT, GL_FALSE, sizeof(float)*5,(GLvoid*)(sizeof(float)*3));
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    setOwner(owner);
 }
 
 ImageComponent::~ImageComponent()
@@ -107,5 +109,23 @@ void ImageComponent::render()
     glUniform1i(uniformLoc, 0); //여기 0은 GL_TEXTURE0을 의미한다. 텍스처슬롯!
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, textureID);
+
+    auto tintLoc = glGetUniformLocation(frameworkInst->curRenderer->getProgramID(), "tintColor");
+    if(isTintEnabled)
+        glUniform3f(tintLoc, tintR,tintG,tintB);
+    else
+        glUniform3f(tintLoc, 1.0f, 1.0f, 1.0f);
     glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+void ImageComponent::setTintEnabled(bool isEnabled)
+{
+    isTintEnabled = isEnabled;
+}
+
+void ImageComponent::setTintColor(const float r, const float g, const float b)
+{
+    tintR = r;
+    tintG = g;
+    tintB = b;
 }

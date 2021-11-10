@@ -24,10 +24,10 @@ public:
     void possess(HPawn* pawn);
     void unpossess();
     void changeInputMode(const INPUT_MODE inputMode);
-    INPUT_MODE getInputMode();
+    INPUT_MODE getInputMode() const;
     void handleEvent(const Event& e);
     //컨트롤러는 자기가 조종중인 Pawn에게만 이벤트를 넘긴다.
-    HPawn* getControlledPawn();
+    HPawn* getControlledPawn() const;
 
 protected:
     HPawn* controlledPawn = nullptr;

@@ -7,10 +7,10 @@
 
 Camera2DComponent::Camera2DComponent(const float left, const float right, const float bottom,
                                      const float top, const glm::vec3 &eye, const glm::vec3 &at,
-                                     const glm::vec3 &up):
+                                     const glm::vec3 &up, HActor* owner):
 left(left), right(right), bottom(bottom), top(top), eye(eye), at(at), up(up)
 {
-
+    setOwner(owner);
 }
 
 Camera2DComponent::~Camera2DComponent()

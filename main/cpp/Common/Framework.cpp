@@ -64,8 +64,12 @@ void Framework::init(const char* VSPath, const char* FSPath)
     curRenderer->addClearBit(GL_COLOR_BUFFER_BIT);
     curRenderer->addClearBit(GL_DEPTH_BUFFER_BIT);
     curRenderer->enableGLFeature(GL_DEPTH_TEST);
+    curRenderer->enableGLFeature(GL_BLEND);
+    curRenderer->setClearColor(0.0f,1.0f,1.0f,1.0f);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    curLevel = new MainLevel();
+    curLevel = GlobalFunction::createNewObject<MainLevel>();
+    curLevel->enterGameWorld();
     eventQ = EventQ::getInstance();
 
 }
@@ -87,27 +91,6 @@ void Framework::render()
 {
     curRenderer->readyToDraw();
     curLevel->render();
-
-    //glm::mat4 worldTransform = glm::translate(glm::mat4(1.0f),glm::vec3(100.f,0.0f,0.0f));
-    //worldTransform *= glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(0.0f,0.0f,1.0f));
-    //worldTransform *= glm::scale(glm::mat4(1.0f), glm::vec3(300.0f,300.0f,300.0f));
-    //auto worldTransLoc = glGetUniformLocation(curRenderer->getProgramID(), "worldTrans");
-    //glUniformMatrix4fv(worldTransLoc, 1, GL_FALSE, glm::value_ptr(worldTransform));
-
-    /*glm::mat4 cameraTransform = glm::lookAt(glm::vec3(0.0f,0.0f,10.0f),
-                                         glm::vec3(0.0f,0.0f,0.0f),
-                                         glm::vec3(0.0f,1.0f,0.0f));
-    auto cameraTransLoc = glGetUniformLocation(curRenderer->getProgramID(), "cameraTrans");
-    glUniformMatrix4fv(cameraTransLoc, 1, GL_FALSE, glm::value_ptr(cameraTransform));
-
-    glm::mat4 projTransform = glm::ortho(-400.0f, 400.0f,-400.0f,400.0f,0.1f,100.0f);
-    auto projTransLoc = glGetUniformLocation(curRenderer->getProgramID(), "projTrans");
-    glUniformMatrix4fv(projTransLoc, 1, GL_FALSE, glm::value_ptr(projTransform));*/
-
-
-    //auto uniformLoc = glGetUniformLocation(curRenderer->getProgramID(), "uTexCoord");
-    //glUniform1i(uniformLoc, 0); //여기 0은 GL_TEXTURE0을 의미한다. 텍스처슬롯!
-
     //씬 렌더링 그리기 전에 update를 호출해야 한다.
     //그러니까 es의 view renderer에서 onDrawFrame이 호출되면 호출되는 함수를 지정해놓고 해당 함수에서 작업을 하게끔!
 }

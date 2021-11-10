@@ -39,7 +39,7 @@ void HPrimitiveComponent::setVisibility(const bool isVisible)
     visibility = isVisible;
 }
 
-bool HPrimitiveComponent::getVisibility()
+bool HPrimitiveComponent::getVisibility() const
 {
     return visibility;
 }

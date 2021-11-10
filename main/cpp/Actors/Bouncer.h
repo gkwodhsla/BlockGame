@@ -2,6 +2,8 @@
 #include "HPawn.h"
 
 class ImageComponent;
+class BoxCollisionComponent;
+class CircleCollisionComponent;
 
 class Bouncer: public HPawn
 {
@@ -13,10 +15,9 @@ public:
     virtual void render() override;
     virtual void update(const float deltaTime) override;
     virtual void handleEvent(const Event& e) override;
-
 private:
     ImageComponent* bouncerImage = nullptr;
-    ImageComponent* bouncerImage2 = nullptr;
+    BoxCollisionComponent* boxCollisionComponent = nullptr;
+
     std::pair<float, float> befPos{0.0f, 0.0f};
-    //나중에 바운딩 박스 추가
 };

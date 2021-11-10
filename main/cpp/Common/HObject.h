@@ -10,11 +10,11 @@ public:
     virtual ~HObject() = 0;
 
 public:
-    void setID(void* newID)
+    inline void setID(void* newID)
     {
         id = newID;
     }
-    void* getID()
+    inline void* getID() const
     {
         return id;
     }

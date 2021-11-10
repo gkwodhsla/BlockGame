@@ -6,6 +6,7 @@
 #define PRINT_LOG(str, type) \
 __android_log_print(ANDROID_LOG_INFO, "gles log" ,#type, str);
 
+class HLevelBase;
 namespace GlobalFunction
 {
     template<typename T>
@@ -35,6 +36,25 @@ namespace GlobalFunction
             return nullptr;
         }
     }
+    template<typename To, typename From>
+    To* Cast(const From* src) //안전한 다운캐스팅을 지원하는 함수이다.
+    {
+        if(GetClassTypeUniqueID<To>() == src->getID())
+        {
+            return (To*)src;
+        }
+        else
+        {
+            if(src->getID() == nullptr)
+            {
+                __android_log_print(ANDROID_LOG_INFO, "Cast_Error",
+                                    "Warning: Input Class has no unique ID Please Set Unique ID"
+                                    " using setID(GlobalFunction::<ClassType>GetClassTypeUniqueID())");
+                exit(1);
+            }
+            return nullptr;
+        }
+    }
 
     template<typename T, typename ...Types>
     static T* createNewObject(Types ...args)
@@ -43,4 +63,6 @@ namespace GlobalFunction
         newItem->setID(GlobalFunction::GetClassTypeUniqueID<T>());
         return newItem;
     }
+
+    HLevelBase* getLevel();
 }

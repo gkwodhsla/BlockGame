@@ -1,6 +1,7 @@
 #include "HLevelBase.h"
 #include "../Actors/HActor.h"
 #include "../Controllers/HPlayerController.h"
+#include "../Components/CollisionParent.h"
 
 HLevelBase::HLevelBase()
 {
@@ -46,6 +47,13 @@ void HLevelBase::handleEvent(const Event& e)
 
 void HLevelBase::update(const float deltaTime)
 {
+    for(int i = 0; i < (int)collisionObjects.size() - 1; ++i)
+    {
+        for(int j = i + 1; j < (int)collisionObjects.size(); ++j)
+        {
+            collisionObjects[i]->checkCollision(*collisionObjects[j]);
+        }
+    }
     for(auto&actor : actors)
     {
         if(actor)
@@ -89,4 +97,9 @@ void HLevelBase::changeController(HPlayerController* newController)
         curController = nullptr;
     }
     curController = newController;
+}
+
+void HLevelBase::addCollisionObject(CollisionParent* newObj)
+{
+    collisionObjects.emplace_back(newObj);
 }

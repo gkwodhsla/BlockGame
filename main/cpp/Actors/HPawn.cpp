@@ -16,7 +16,7 @@ void HPawn::setCanRecvInputEvent(bool canInput)
     canReceiveInputFromPlayer = canInput;
 }
 
-HPlayerController* HPawn::getController()
+HPlayerController* HPawn::getController() const
 {
     return controller;
 }

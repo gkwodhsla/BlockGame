@@ -8,4 +8,8 @@ public:
     MainLevel(const MainLevel&) = delete;
     MainLevel&operator=(const MainLevel&) = delete;
     virtual ~MainLevel();
+
+public:
+    void exitGameWorld() override;
+    void enterGameWorld() override;
 };

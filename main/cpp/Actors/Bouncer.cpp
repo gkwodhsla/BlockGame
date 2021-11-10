@@ -1,17 +1,27 @@
 #include "Bouncer.h"
 #include "../Components/ImageComponent.h"
+#include "../Components/BoxCollisionComponent.h"
 
 Bouncer::Bouncer()
 {
-    bouncerImage = new ImageComponent("images/brick.png");
+    bouncerImage = createComponent<ImageComponent>("images/platform.png", this);
     bouncerImage->attachTo(rootComponent);
-    bouncerImage->setOwner(this);
+
+    auto imageScale = bouncerImage->getComponentWorldScale();
+    boxCollisionComponent = createComponent<BoxCollisionComponent>(imageScale.first,
+                                                                   imageScale.second, this);
+    boxCollisionComponent->attachTo(rootComponent);
+    boxCollisionComponent->registerCollisionResponse([this](HActor*)
+                                                     {
+                                                            bouncerImage->setTintEnabled(true);
+                                                            bouncerImage->setTintColor(1.0f,0.0f,0.0f);
+                                                            PRINT_LOG("Collision!",%s);
+                                                     });
 }
 
 Bouncer::~Bouncer()
 {
-    if(bouncerImage)
-        delete bouncerImage;
+
 }
 
 void Bouncer::render()

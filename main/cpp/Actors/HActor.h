@@ -10,7 +10,6 @@
 
 class HComponent;
 class HSceneComponent;
-class ImageComponent;
 
 //액터는 월드에 배치되는 오브젝트이다.
 //액터는 반드시 하나의 루트 컴포넌트를 가지고, 이 컴포넌트에
@@ -37,22 +36,22 @@ public:
 
 public:
     void setVisibility(const bool isVisible);
-    bool getVisibility();
-    HSceneComponent* getRootComponent();
-    glm::vec2 getActorDirectionalVector();
+    bool getVisibility() const;
+    HSceneComponent* getRootComponent() const;
+    glm::vec2 getActorDirectionalVector() const;
     void setActorDirectionalVector(const glm::vec2& newDir);
     std::pair<float, float> getActorWorldLocation();
     void setActorWorldLocation(const float x, const float y);
     void setActorWorldScale(const float x, const float y);
-    float getActorWorldRotation();
+    float getActorWorldRotation() const;
     void setActorTickable(const bool isTickable);
-    bool getActorTickable();
+    bool getActorTickable() const;
     void setLifeTime(const float lifeTime);
     void setIsSetLifeTime(const bool isSetLifeTime);
     void registerFuncWhenActorLifeTimeZero(std::function<void()> func);
-    bool getIsSetLifeTime();
+    bool getIsSetLifeTime() const;
     void setPendingKill(const bool newPendingKill);
-    bool getPendingKill();
+    bool getPendingKill() const;
 
 protected:
     HSceneComponent* rootComponent;
@@ -63,13 +62,13 @@ protected:
     bool isSetLifeTime = false;
     bool isPendingKill = false;
 
-    /*template<typename T, typename ...Types>
+    template<typename T, typename ...Types>
     T* createComponent(Types ...args)
     {
         T* newItem = GlobalFunction::createNewObject<T>(args...);
         actorComponents.emplace_back(newItem);
         return newItem;
-    }*/
+    }
     //이 함수를 통해 컴포넌트를 생성한다.
 
 protected:

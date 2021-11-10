@@ -14,7 +14,7 @@ public:
     HPawn& operator=(const HPawn&) = delete;
     virtual ~HPawn();
     void setCanRecvInputEvent(bool canInput);
-    HPlayerController* getController();
+    HPlayerController* getController() const;
     virtual void render() override;
     virtual void update(const float deltaTime) override;
     virtual void handleEvent(const Event& e) = 0;

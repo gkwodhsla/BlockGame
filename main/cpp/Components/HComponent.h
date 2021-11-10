@@ -13,7 +13,7 @@ public:
 
 public:
     virtual void update(const float deltaTime) = 0;
-    HActor* getOwner()
+    HActor* getOwner() const
     {
         return owner;
     }
@@ -23,7 +23,7 @@ public:
     {
         tickable = isTickable;
     }
-    const bool getComponentTickable()
+    const bool getComponentTickable() const
     {
         return tickable;
     }

@@ -28,7 +28,7 @@ void HPlayerController::changeInputMode(const INPUT_MODE inputMode)
     curInputMode = inputMode;
 }
 
-INPUT_MODE HPlayerController::getInputMode()
+INPUT_MODE HPlayerController::getInputMode() const
 {
     return curInputMode;
 }
@@ -41,7 +41,7 @@ void HPlayerController::handleEvent(const Event& e)
     }
 }
 
-HPawn* HPlayerController::getControlledPawn()
+HPawn* HPlayerController::getControlledPawn() const
 {
     return controlledPawn;
 }

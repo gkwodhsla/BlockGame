@@ -54,17 +54,17 @@ void HActor::setVisibility(bool isVisible)
     visibility = isVisible;
 }
 
-bool HActor::getVisibility()
+bool HActor::getVisibility() const
 {
     return visibility;
 }
 
-HSceneComponent* HActor::getRootComponent()
+HSceneComponent* HActor::getRootComponent() const
 {
     return rootComponent;
 }
 
-glm::vec2 HActor::getActorDirectionalVector()
+glm::vec2 HActor::getActorDirectionalVector() const
 {
     return dirVec;
 }
@@ -90,7 +90,7 @@ void HActor::setActorWorldScale(const float x, const float y)
     rootComponent->setComponentLocalScale({x, y});
 }
 
-float HActor::getActorWorldRotation()
+float HActor::getActorWorldRotation() const
 {
     return rootComponent->getComponentLocalRotation();
 }
@@ -100,7 +100,7 @@ void HActor::setActorTickable(const bool isTickable)
     tickable = isTickable;
 }
 
-bool HActor::getActorTickable()
+bool HActor::getActorTickable() const
 {
     return tickable;
 }
@@ -148,7 +148,7 @@ void HActor::registerFuncWhenActorLifeTimeZero(std::function<void()> func)
     destroyAction = func;
 }
 
-bool HActor::getIsSetLifeTime()
+bool HActor::getIsSetLifeTime() const
 {
     return this->isSetLifeTime;
 }
@@ -158,7 +158,7 @@ void HActor::setPendingKill(bool newPendingKill)
     isPendingKill = newPendingKill;
 }
 
-bool HActor::getPendingKill()
+bool HActor::getPendingKill() const
 {
     return isPendingKill;
 }

@@ -23,6 +23,8 @@ add_library(gles3jni SHARED
         Actors/HPawn.cpp
         Actors/Camera.cpp
         Actors/Bouncer.cpp
+        Actors/Ball.cpp
+        Common/Common.cpp
         Common/HObject.cpp
         Common/program.cpp
         Common/renderer.cpp
@@ -33,6 +35,9 @@ add_library(gles3jni SHARED
         Components/HSceneComponent.cpp
         Components/ImageComponent.cpp
         Components/Camera2DComponent.cpp
+        Components/CollisionParent.cpp
+        Components/BoxCollisionComponent.cpp
+        Components/CircleCollisionComponent.cpp
         Controllers/HPlayerController.cpp
         Levels/HLevelBase.cpp
         Levels/MainLevel.cpp

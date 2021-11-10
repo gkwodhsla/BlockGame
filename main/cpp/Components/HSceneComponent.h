@@ -22,23 +22,23 @@ public:
     virtual void render();
     void update(const float deltaTime) override;
 public:
-    std::pair<float, float> getComponentWorldLocation();
-    float getComponentWorldRotation();
-    std::pair<float, float> getComponentWorldScale();
-    std::pair<float, float> getComponentLocalLocation();
-    float getComponentLocalRotation();
-    std::pair<float, float> getComponentLocalScale();
-    HSceneComponent* getParentComponent();
+    std::pair<float, float> getComponentWorldLocation() const;
+    float getComponentWorldRotation() const;
+    std::pair<float, float> getComponentWorldScale() const;
+    std::pair<float, float> getComponentLocalLocation() const;
+    float getComponentLocalRotation() const;
+    std::pair<float, float> getComponentLocalScale() const;
+    HSceneComponent* getParentComponent() const;
     void setComponentLocalLocation(const std::pair<float, float>& loc);
     void setComponentLocalScale(const std::pair<float, float>& scale);
     void setComponentLocalRotation(const float degree);
     void setOwner(HActor* owner);
     void setAffectRotationFromParent (const bool isAffect);
-    bool getAffectRotationFromParent ();
+    bool getAffectRotationFromParent () const;
     void setAffectLocationFromParent (const bool isAffect);
-    bool getAffectLocationFromParent ();
+    bool getAffectLocationFromParent () const;
     void setAffectScaleFromParent (const bool isAffect);
-    bool getAffectScaleFromParent ();
+    bool getAffectScaleFromParent () const;
 
 public:
     void attachTo(HSceneComponent* component, bool isAffectFromParent = true);
