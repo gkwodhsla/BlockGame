@@ -5,7 +5,7 @@ class Camera2DComponent;
 class Camera: public HActor
 {
 public:
-    Camera();
+    Camera(float rendererSize);
     Camera(const Camera&) = delete;
     Camera& operator=(const Camera&) = delete;
     virtual ~Camera();

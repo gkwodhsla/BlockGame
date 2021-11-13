@@ -15,8 +15,4 @@ public:
 public:
     virtual void render() override;
     virtual void update(const float deltaTime) override;
-    void setCollisionComp(float rad);
-
-private:
-    ImageComponent* brickImage = nullptr;
 };

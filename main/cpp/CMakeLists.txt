@@ -26,6 +26,7 @@ add_library(gles3jni SHARED
         Actors/Ball.cpp
         Actors/BrickParent.cpp
         Actors/UnbreakableBrick.cpp
+        Actors/BreakableBrick.cpp
         Common/Common.cpp
         Common/HObject.cpp
         Common/program.cpp

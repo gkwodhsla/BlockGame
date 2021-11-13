@@ -2,7 +2,6 @@
 #include "Ball.h"
 #include "../Components/ImageComponent.h"
 #include "../Components/BoxCollisionComponent.h"
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
@@ -34,7 +33,7 @@ Bouncer::Bouncer()
                                                                     auto rotateMat =
                                                                             glm::rotate(glm::mat4(1.0f), glm::radians(-rotDegree),
                                                                                         glm::vec3(0.0f,0.0f,1.0f));
-                                                                    auto ballNewDir=glm::vec4(middleDir.x,middleDir.y,0.0f,1.f)*rotateMat;
+                                                                    auto ballNewDir=glm::vec4(middleDir.x,middleDir.y,0.0f,1.0f)*rotateMat;
                                                                     ball->setActorDirectionalVector(glm::vec2(ballNewDir.x, ballNewDir.y));
                                                                 }
                                                                 else
@@ -42,7 +41,7 @@ Bouncer::Bouncer()
                                                                     auto rotateMat =
                                                                             glm::rotate(glm::mat4(1.0f), glm::radians(rotDegree),
                                                                                         glm::vec3(0.0f,0.0f,1.0f));
-                                                                    auto ballNewDir=glm::vec4(middleDir.x,middleDir.y,0.0f,1.f)*rotateMat;
+                                                                    auto ballNewDir=glm::vec4(middleDir.x,middleDir.y,0.0f,1.0f)*rotateMat;
                                                                     ball->setActorDirectionalVector(glm::vec2(ballNewDir.x, ballNewDir.y));
                                                                 }
                                                             }

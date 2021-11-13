@@ -1,9 +1,10 @@
 #include "Camera.h"
 #include "../Components/Camera2DComponent.h"
 
-Camera::Camera()
+Camera::Camera(float rendererSize)
 {
-    cameraComp = createComponent<Camera2DComponent>(-400.0f,400.0f,-400.0f,400.0f,glm::vec3{0.0f,0.0f,10.0f},
+    float halfSize = rendererSize / 2.0f;
+    cameraComp = createComponent<Camera2DComponent>(-halfSize,halfSize,-halfSize,halfSize,glm::vec3{0.0f,0.0f,10.0f},
                                                     glm::vec3{0.0f,0.0f,0.0f},glm::vec3{0.0f,1.0f,0.0f}, this);
     cameraComp->attachTo(rootComponent);
 }

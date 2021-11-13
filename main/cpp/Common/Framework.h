@@ -46,6 +46,7 @@ public:
     static HLevelBase* curLevel;
     static GLuint screenWidth;
     static GLuint screenHeight;
+    static constexpr float rendererSize = 800.0f;
 private:
     static Framework* instance;
 };

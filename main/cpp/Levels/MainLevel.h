@@ -12,4 +12,15 @@ public:
 public:
     void exitGameWorld() override;
     void enterGameWorld() override;
+
+private:
+    void createBaseObject();
+
+private:
+    static constexpr float boardYSize = 400.0f;
+    static constexpr int boardSize = 15;
+    static const float blockBeginYPos;
+    static const float blockXSize;
+    static const float blockYSize;
+    static int gameBoard[boardSize][boardSize];
 };

@@ -49,9 +49,15 @@ void HLevelBase::update(const float deltaTime)
 {
     for(int i = 0; i < (int)collisionObjects.size() - 1; ++i)
     {
-        for(int j = i + 1; j < (int)collisionObjects.size(); ++j)
+        if(collisionObjects[i]->getOwner()->getVisibility())
         {
-            collisionObjects[i]->checkCollision(*collisionObjects[j]);
+            for(int j = i + 1; j < (int)collisionObjects.size(); ++j)
+            {
+                if(collisionObjects[j]->getOwner()->getVisibility())
+                {
+                    collisionObjects[i]->checkCollision(*collisionObjects[j]);
+                }
+            }
         }
     }
     for(auto&actor : actors)
