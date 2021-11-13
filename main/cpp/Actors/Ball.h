@@ -21,4 +21,5 @@ private:
     ImageComponent* ballImg;
     CircleCollisionComponent* collisionComp;
     MovementComponent* ballMovement;
+    static const float ballSpeed;
 };

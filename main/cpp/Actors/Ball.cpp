@@ -3,6 +3,8 @@
 #include "../Components/CircleCollisionComponent.h"
 #include "../Components/MovementComponent.h"
 
+const float Ball::ballSpeed = 400.0f;
+
 Ball::Ball()
 {
     ballImg = createComponent<ImageComponent>("images/ball.png", this);
@@ -13,13 +15,11 @@ Ball::Ball()
 
     collisionComp->registerCollisionResponse([this](HActor*)
                                                      {
-                                                         ballImg->setTintEnabled(true);
-                                                         ballImg->setTintColor(0.0f,1.0f,0.0f);
-                                                         PRINT_LOG("Collision!",%s);
+
                                                      });
 
     ballMovement = createComponent<MovementComponent>(this);
-    ballMovement->setSpeed(300.0f);
+    ballMovement->setSpeed(ballSpeed);
     this->setActorDirectionalVector(glm::vec2(0.0f,-1.0f));
 }
 
