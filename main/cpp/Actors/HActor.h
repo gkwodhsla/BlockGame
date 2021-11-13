@@ -41,6 +41,7 @@ public:
     glm::vec2 getActorDirectionalVector() const;
     void setActorDirectionalVector(const glm::vec2& newDir);
     std::pair<float, float> getActorWorldLocation();
+    std::pair<float, float> getActorWorldScale();
     void setActorWorldLocation(const float x, const float y);
     void setActorWorldScale(const float x, const float y);
     float getActorWorldRotation() const;

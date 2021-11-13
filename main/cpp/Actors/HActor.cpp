@@ -80,6 +80,11 @@ std::pair<float, float> HActor::getActorWorldLocation()
     return rootComponent->getComponentLocalLocation();
 }
 
+std::pair<float, float> HActor::getActorWorldScale()
+{
+    return rootComponent->getComponentLocalScale();
+}
+
 void HActor::setActorWorldLocation(float x, float y)
 {
     rootComponent->setComponentLocalLocation({x, y});

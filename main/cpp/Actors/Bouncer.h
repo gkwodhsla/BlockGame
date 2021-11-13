@@ -20,4 +20,5 @@ private:
     BoxCollisionComponent* boxCollisionComponent = nullptr;
 
     std::pair<float, float> befPos{0.0f, 0.0f};
+    static const float maxRotDeg;
 };
