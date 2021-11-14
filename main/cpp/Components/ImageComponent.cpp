@@ -65,9 +65,9 @@ GLuint ImageComponent::createTexture(const char *filePath, const bool isCreateMi
                                      GLbitfield minFilter, const GLbitfield wrappingModeS, const GLbitfield wrappingModeT)
 {
     AAsset* rawImage = AAssetManager_open(Framework::assetMng, filePath, AASSET_MODE_UNKNOWN);
-    char* buffer = nullptr;
+    unsigned char* buffer = nullptr;
     size_t fileSize = AAsset_getLength(rawImage);
-    buffer = new char[fileSize];
+    buffer = new unsigned char[fileSize];
     memset(buffer,0,fileSize);
     AAsset_read(rawImage, buffer, fileSize);
     AAsset_close(rawImage);

@@ -6,6 +6,7 @@
 #include "../Actors/Ball.h"
 #include "../Actors/UnbreakableBrick.h"
 #include "../Actors/BreakableBrick.h"
+#include "../Actors/ScoreBoard.h"
 #include "../Components/CircleCollisionComponent.h"
 #include <random>
 
@@ -65,6 +66,10 @@ void MainLevel::enterGameWorld()
             }
         }
     }
+
+    auto board = spawnActor<ScoreBoard>();
+    board->setActorWorldLocation(-100.0f, 0.0f);
+    board->setActorWorldScale(0.5f,0.5f);
 }
 
 void MainLevel::exitGameWorld()

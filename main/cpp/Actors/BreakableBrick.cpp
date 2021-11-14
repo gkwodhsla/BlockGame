@@ -1,4 +1,5 @@
 #include "BreakableBrick.h"
+#include "Ball.h"
 #include "../Components/ImageComponent.h"
 #include "../Components/BoxCollisionComponent.h"
 
@@ -8,8 +9,11 @@ BreakableBrick::BreakableBrick(const char *imgPath)
     brickImage->attachTo(rootComponent);
     collisionComp->registerCollisionResponse([this](HActor* other)
                                              {
-                                                 BrickParent::changeBallDirVec(this, other);
-                                                 this->setVisibility(false);
+                                                 if(GlobalFunction::Cast<Ball>(other))
+                                                 {
+                                                     BrickParent::changeBallDirVec(this, other);
+                                                     this->setVisibility(false);
+                                                 }
                                              });
 }
 

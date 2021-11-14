@@ -5,7 +5,6 @@
 #include "../Actors/HActor.h"
 #include "../Levels/MainLevel.h"
 
-
 #include <GLES3/gl3.h>
 #include <jni.h>
 #include <android/asset_manager.h>
@@ -18,7 +17,6 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/ext.hpp>
 
-
 AAssetManager* Framework::assetMng = nullptr;
 Framework* Framework::instance = nullptr;
 Renderer* Framework::curRenderer = nullptr;
@@ -27,6 +25,7 @@ HLevelBase* Framework::curLevel = nullptr;
 GLuint Framework::screenWidth = 0;
 GLuint Framework::screenHeight = 0;
 Framework* frameworkInst = nullptr;
+
 
 Framework::~Framework()
 {
@@ -71,7 +70,6 @@ void Framework::init(const char* VSPath, const char* FSPath)
     curLevel = GlobalFunction::createNewObject<MainLevel>();
     curLevel->enterGameWorld();
     eventQ = EventQ::getInstance();
-
 }
 
 void Framework::handleEvent()
@@ -86,7 +84,6 @@ void Framework::update(const float deltaTime)
 {
     curLevel->update(deltaTime);
 }
-
 void Framework::render()
 {
     curRenderer->readyToDraw();

@@ -1,6 +1,5 @@
 #pragma once
 #include "HPrimitiveComponent.h"
-#include <GLES3/gl3.h>
 
 class ImageComponent: public HPrimitiveComponent
 {

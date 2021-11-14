@@ -1,4 +1,5 @@
 #include "UnbreakableBrick.h"
+#include "Ball.h"
 #include "../Components/ImageComponent.h"
 #include "../Components/BoxCollisionComponent.h"
 
@@ -9,7 +10,10 @@ UnbreakableBrick::UnbreakableBrick(const char *imgPath)
     brickImage->attachTo(rootComponent);
     collisionComp->registerCollisionResponse([this](HActor* other)
     {
-        BrickParent::changeBallDirVec(this, other);
+        if(GlobalFunction::Cast<Ball>(other))
+        {
+            BrickParent::changeBallDirVec(this, other);
+        }
     });
 }
 

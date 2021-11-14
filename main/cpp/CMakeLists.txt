@@ -17,6 +17,7 @@ set(LLVM_ENABLE_RTTI) #rtti 활성화
 #endif (${ANDROID_PLATFORM_LEVEL} LESS 12)
 set(OPENGL_LIB GLESv3) #버전3만 지원
 add_subdirectory(glm-master) #재귀적으로 CMakeLists 사용
+add_subdirectory(freetype)
 
 add_library(gles3jni SHARED
         Actors/HActor.cpp
@@ -27,6 +28,7 @@ add_library(gles3jni SHARED
         Actors/BrickParent.cpp
         Actors/UnbreakableBrick.cpp
         Actors/BreakableBrick.cpp
+        Actors/ScoreBoard.cpp
         Common/Common.cpp
         Common/HObject.cpp
         Common/program.cpp
@@ -42,6 +44,7 @@ add_library(gles3jni SHARED
         Components/BoxCollisionComponent.cpp
         Components/CircleCollisionComponent.cpp
         Components/MovementComponent.cpp
+        Components/TTFComponent.cpp
         Controllers/HPlayerController.cpp
         Levels/HLevelBase.cpp
         Levels/MainLevel.cpp
@@ -51,6 +54,7 @@ add_library(gles3jni SHARED
 target_link_libraries(gles3jni
         ${OPENGL_LIB}
         glm
+        freetype
         android
         EGL
         log

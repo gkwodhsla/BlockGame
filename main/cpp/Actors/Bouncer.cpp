@@ -5,7 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
-const float Bouncer::maxRotDeg = 45.0f;
+const float Bouncer::maxRotDeg = 60.0f;
 
 Bouncer::Bouncer()
 {

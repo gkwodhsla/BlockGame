@@ -32,6 +32,9 @@ void HPrimitiveComponent::render()
                                  glm::vec3(worldScale.first,worldScale.second,0.0f));
     auto worldTransLoc = glGetUniformLocation(Framework::curRenderer->getProgramID(), "worldTrans");
     glUniformMatrix4fv(worldTransLoc, 1, GL_FALSE, glm::value_ptr(worldTransform));
+
+    auto isFontDrawLoc = glGetUniformLocation(Framework::curRenderer->getProgramID(), "isDrawFont");
+    glUniform1i(isFontDrawLoc, false);
 }
 
 void HPrimitiveComponent::setVisibility(const bool isVisible)
