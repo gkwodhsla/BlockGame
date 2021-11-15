@@ -65,4 +65,5 @@ namespace GlobalFunction
     }
 
     HLevelBase* getLevel();
+    char* readFile(const char* filePath, size_t& fileSize);
 }

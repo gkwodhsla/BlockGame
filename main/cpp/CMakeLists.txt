@@ -29,6 +29,7 @@ add_library(gles3jni SHARED
         Actors/UnbreakableBrick.cpp
         Actors/BreakableBrick.cpp
         Actors/ScoreBoard.cpp
+        Actors/StageManager.cpp
         Common/Common.cpp
         Common/HObject.cpp
         Common/program.cpp

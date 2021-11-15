@@ -5,8 +5,6 @@
 #include <fstream>
 #include <iterator>
 #include <string>
-#include <android/asset_manager.h>
-#include <android/asset_manager_jni.h>
 
 Program::Program(const char *VSPath, const char *FSPath)
 {
@@ -26,13 +24,8 @@ Program::~Program()
 
 GLuint Program::compileShader(GLenum shaderType, const char *sourceLoc)
 {
-    AAsset* shaderCode = AAssetManager_open(frameworkInst->assetMng, sourceLoc, AASSET_MODE_UNKNOWN);
-    char* buffer = nullptr;
-    size_t fileSize = AAsset_getLength(shaderCode);
-    buffer = new char[fileSize + 1];
-    memset(buffer,0,fileSize+1);
-    AAsset_read(shaderCode, buffer, fileSize);
-    AAsset_close(shaderCode);
+    size_t fileSize = 0;
+    char* buffer = GlobalFunction::readFile(sourceLoc, fileSize);
 
     GLuint shader = glCreateShader(shaderType);
     //셰이더 오브젝트 생성

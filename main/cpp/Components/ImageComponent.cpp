@@ -19,7 +19,14 @@ float ImageComponent::rect[] =
 ImageComponent::ImageComponent(const char *filePath, HActor*owner, const bool isCreateMipmap, GLbitfield magFilter,
                                GLbitfield minFilter, const GLbitfield wrappingModeS, const GLbitfield wrappingModeT)
 {
-    textureID = createTexture(filePath, isCreateMipmap, magFilter, minFilter, wrappingModeS, wrappingModeT);
+    if(filePath==nullptr)
+    {
+        png = nullptr;
+    }
+    else
+    {
+        png = new PNG(filePath, isCreateMipmap, magFilter, minFilter, wrappingModeS, wrappingModeT);
+    }
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(rect), nullptr, GL_STATIC_DRAW);
@@ -43,6 +50,70 @@ ImageComponent::ImageComponent(const char *filePath, HActor*owner, const bool is
 
 ImageComponent::~ImageComponent()
 {
+    if(png)
+    {
+        delete png;
+        png = nullptr;
+    }
+    if(VBO)
+    {
+        glDeleteBuffers(1, &VBO);
+    }
+}
+
+void ImageComponent::changeImage(const char *filePath, const bool isCreateMipmap, GLbitfield magFilter,
+                                 GLbitfield minFilter, const GLbitfield wrappingModeS, const GLbitfield wrappingModeT)
+{
+    png->changeImage(filePath, isCreateMipmap, magFilter, minFilter, wrappingModeS, wrappingModeT);
+}
+
+void ImageComponent::render()
+{
+    if(png)
+    {
+        HPrimitiveComponent::render();
+        auto uniformLoc = glGetUniformLocation(frameworkInst->curRenderer->getProgramID(), "uTexCoord");
+        glUniform1i(uniformLoc, 0); //여기 0은 GL_TEXTURE0을 의미한다. 텍스처슬롯!
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, png->getTextureID());
+
+        auto tintLoc = glGetUniformLocation(frameworkInst->curRenderer->getProgramID(), "tintColor");
+        if(isTintEnabled)
+            glUniform3f(tintLoc, tintR,tintG,tintB);
+        else
+            glUniform3f(tintLoc, 1.0f, 1.0f, 1.0f);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+    }
+}
+
+void ImageComponent::setTintEnabled(bool isEnabled)
+{
+    isTintEnabled = isEnabled;
+}
+
+void ImageComponent::setTintColor(const float r, const float g, const float b)
+{
+    tintR = r;
+    tintG = g;
+    tintB = b;
+}
+
+
+
+
+
+
+
+
+PNG::PNG(const char *filePath, const bool isCreateMipmap, const GLbitfield magFilter,
+         const GLbitfield minFilter, const GLbitfield wrappingModeS,
+         const GLbitfield wrappingModeT)
+{
+    textureID = createTexture(filePath, isCreateMipmap, magFilter, minFilter, wrappingModeS, wrappingModeT);
+}
+
+PNG::~PNG()
+{
     if(textureID)
     {
         glDeleteTextures(1,&textureID);
@@ -50,8 +121,9 @@ ImageComponent::~ImageComponent()
     }
 }
 
-void ImageComponent::changeImage(const char *filePath, const bool isCreateMipmap, GLbitfield magFilter,
-                                 GLbitfield minFilter, const GLbitfield wrappingModeS, const GLbitfield wrappingModeT)
+void PNG::changeImage(const char *filePath, const bool isCreateMipmap, const GLbitfield magFilter,
+                      const GLbitfield minFilter, const GLbitfield wrappingModeS,
+                      const GLbitfield wrappingModeT)
 {
     if(textureID)
     {
@@ -61,16 +133,12 @@ void ImageComponent::changeImage(const char *filePath, const bool isCreateMipmap
     textureID = createTexture(filePath, isCreateMipmap, magFilter, minFilter, wrappingModeS, wrappingModeT);
 }
 
-GLuint ImageComponent::createTexture(const char *filePath, const bool isCreateMipmap, GLbitfield magFilter,
-                                     GLbitfield minFilter, const GLbitfield wrappingModeS, const GLbitfield wrappingModeT)
+GLuint PNG::createTexture(const char *filePath, const bool isCreateMipmap, const GLbitfield magFilter,
+                   const GLbitfield minFilter, const GLbitfield wrappingModeS,
+                   const GLbitfield wrappingModeT)
 {
-    AAsset* rawImage = AAssetManager_open(Framework::assetMng, filePath, AASSET_MODE_UNKNOWN);
-    unsigned char* buffer = nullptr;
-    size_t fileSize = AAsset_getLength(rawImage);
-    buffer = new unsigned char[fileSize];
-    memset(buffer,0,fileSize);
-    AAsset_read(rawImage, buffer, fileSize);
-    AAsset_close(rawImage);
+    size_t fileSize = 0;
+    auto buffer = GlobalFunction::readFile(filePath, fileSize);
 
     std::vector<unsigned char> image;
     auto data = std::vector<unsigned char>(buffer, buffer+fileSize);
@@ -100,32 +168,4 @@ GLuint ImageComponent::createTexture(const char *filePath, const bool isCreateMi
     //텍스처의 0번 슬롯을 활성화하고 해당 슬롯에 방금 만든 텍스처 바인드
 
     return temp;
-}
-
-void ImageComponent::render()
-{
-    HPrimitiveComponent::render();
-    auto uniformLoc = glGetUniformLocation(frameworkInst->curRenderer->getProgramID(), "uTexCoord");
-    glUniform1i(uniformLoc, 0); //여기 0은 GL_TEXTURE0을 의미한다. 텍스처슬롯!
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, textureID);
-
-    auto tintLoc = glGetUniformLocation(frameworkInst->curRenderer->getProgramID(), "tintColor");
-    if(isTintEnabled)
-        glUniform3f(tintLoc, tintR,tintG,tintB);
-    else
-        glUniform3f(tintLoc, 1.0f, 1.0f, 1.0f);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-}
-
-void ImageComponent::setTintEnabled(bool isEnabled)
-{
-    isTintEnabled = isEnabled;
-}
-
-void ImageComponent::setTintColor(const float r, const float g, const float b)
-{
-    tintR = r;
-    tintG = g;
-    tintB = b;
 }

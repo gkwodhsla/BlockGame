@@ -96,14 +96,10 @@ void TTFComponent::createFontTexture(const char *filePath, size_t fontSize)
         PRINT_LOG("error occure", %s);
     }
 
-    AAsset* font = AAssetManager_open(Framework::assetMng, "font/EvilEmpire.ttf", AASSET_MODE_UNKNOWN);
-    unsigned char* buffer = nullptr;
-    size_t fileSize = AAsset_getLength(font);
-    buffer = new unsigned char[fileSize];
-    memset(buffer,0,fileSize);
-    AAsset_read(font, buffer, fileSize);
-    AAsset_close(font);
-    error = FT_New_Memory_Face(library,buffer,fileSize,0,&face);
+    size_t fileSize = 0;
+    char* buffer = GlobalFunction::readFile(filePath, fileSize);
+
+    error = FT_New_Memory_Face(library,std::vector<unsigned char>(buffer, buffer+fileSize).data(),fileSize,0,&face);
     if (error == FT_Err_Unknown_File_Format)
     {
         PRINT_LOG("font type error(unknown error)", %s);

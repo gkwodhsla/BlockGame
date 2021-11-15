@@ -7,17 +7,9 @@
 #include "../Actors/UnbreakableBrick.h"
 #include "../Actors/BreakableBrick.h"
 #include "../Actors/ScoreBoard.h"
+#include "../Actors/StageManager.h"
 #include "../Components/CircleCollisionComponent.h"
-#include <random>
 
-std::random_device rd;
-std::default_random_engine dre(rd());
-std::uniform_int_distribution<int> uid(0, 6);
-
-const float MainLevel::blockBeginYPos = 350.0f;
-const float MainLevel::blockXSize = frameworkInst->rendererSize / boardSize;
-const float MainLevel::blockYSize = boardYSize / boardSize;
-int MainLevel::gameBoard[boardSize][boardSize];
 
 MainLevel::MainLevel()
 {
@@ -33,43 +25,12 @@ void MainLevel::enterGameWorld()
 {
     createBaseObject();
 
-    for(int i = 0; i < boardSize; ++i)
-    {
-        for(int j = 0; j < boardSize; ++j)
-        {
-            gameBoard[i][j] = uid(dre);
-        }
-    }
-
-    float rendererHalfSize = frameworkInst->rendererSize / 2.0f;
-    for(int i = 0; i < boardSize; ++i)
-    {
-        for(int j = 0; j < boardSize; ++j)
-        {
-            if(gameBoard[i][j] == 1000)
-            {
-                UnbreakableBrick* brick = spawnActor<UnbreakableBrick>("images/unbreakable.png");
-                brick->setActorWorldScale(blockXSize, blockYSize);
-                brick->setActorWorldLocation(-rendererHalfSize + j*blockXSize + blockXSize/2.0f,
-                                             blockBeginYPos - i*blockYSize - blockYSize/2.0f);
-            }
-            else if(gameBoard[i][j]==0)
-            {
-
-            }
-            else if(gameBoard[i][j] == 2)
-            {
-                BreakableBrick* brick = spawnActor<BreakableBrick>("images/blueBlock.png");
-                brick->setActorWorldScale(blockXSize, blockYSize);
-                brick->setActorWorldLocation(-rendererHalfSize + j*blockXSize + blockXSize/2.0f,
-                                             blockBeginYPos - i*blockYSize - blockYSize/2.0f);
-            }
-        }
-    }
-
     auto board = spawnActor<ScoreBoard>();
     board->setActorWorldLocation(-100.0f, 0.0f);
     board->setActorWorldScale(0.5f,0.5f);
+
+    auto stage = spawnActor<StageManager>();
+    stage->setGameMap();
 }
 
 void MainLevel::exitGameWorld()
