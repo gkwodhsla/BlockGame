@@ -1,6 +1,5 @@
 #include "HLevelBase.h"
 
-
 class MainLevel: public HLevelBase
 {
 public:
@@ -12,6 +11,7 @@ public:
 public:
     void exitGameWorld() override;
     void enterGameWorld() override;
+
 
 private:
     void createBaseObject();

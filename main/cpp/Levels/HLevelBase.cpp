@@ -2,6 +2,7 @@
 #include "../Actors/HActor.h"
 #include "../Controllers/HPlayerController.h"
 #include "../Components/CollisionParent.h"
+#include <algorithm>
 
 HLevelBase::HLevelBase()
 {
@@ -47,6 +48,12 @@ void HLevelBase::handleEvent(const Event& e)
 
 void HLevelBase::update(const float deltaTime)
 {
+    curDeleteTime -= deltaTime;
+    if(curDeleteTime<=0.0f)
+    {
+        destroyActors();
+        curDeleteTime = maxDeleteTime;
+    }
     for(int i = 0; i < (int)collisionObjects.size() - 1; ++i)
     {
         if(collisionObjects[i]->getOwner()->getVisibility())
@@ -80,19 +87,14 @@ void HLevelBase::render()
     }
 }
 
-bool HLevelBase::destroyActor(HActor* actor)
+void HLevelBase::destroyActors()
 {
-    for(auto iter = actors.begin(); iter != actors.end(); ++iter)
+    auto removedIter = std::remove_if(actors.begin(), actors.end(), [](HActor* actor)
     {
-        if(*iter == actor)
-        {
-            delete *iter;
-            *iter = nullptr;
-            actors.erase(iter);
-            return true;
-        }
-    }
-    return false;
+       return actor->getPendingKill();
+    });
+
+    actors.erase(removedIter, actors.end());
 }
 
 void HLevelBase::changeController(HPlayerController* newController)

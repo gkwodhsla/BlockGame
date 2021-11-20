@@ -1,7 +1,7 @@
 #include "HActor.h"
 #include "../Components/HSceneComponent.h"
 #include "../Components/ImageComponent.h"
-//#include "../Level/HLevelBase.h"
+#include "../Levels/HLevelBase.h"
 #include <cmath>
 #include <android/log.h>
 
@@ -14,10 +14,12 @@ HActor::HActor()
     glBindVertexArray(VAO);
     //VAO가 바인딩 됐기 때문에 해당 액터의 컴포넌트에 VBO가 있다면 들러붙는다.
 
-    //destroyAction = [this]()
-    //{
-        //GetLevel()->destroyActor(this);
-    //};
+    destroyAction = [this]()
+    {
+        isPendingKill = true;
+        visibility = false;
+        tickable = false;
+    };
 }
 
 HActor::~HActor()
@@ -37,6 +39,7 @@ HActor::~HActor()
         glDeleteVertexArrays(1, &VAO);
         VAO = 0;
     }
+    PRINT_LOG("delete Actor", "%s");
 }
 
 void HActor::moveTo(const std::pair<float, float> &loc)

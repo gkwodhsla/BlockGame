@@ -20,7 +20,7 @@ public:
     virtual void render();
     virtual void enterGameWorld() = 0;
     virtual void exitGameWorld() = 0;
-    bool destroyActor(HActor* actor);
+    void destroyActors();
     void changeController(HPlayerController* newController);
     void addCollisionObject(CollisionParent* newObj);
 
@@ -37,4 +37,6 @@ protected:
     std::vector<HActor*> actors;
     std::vector<CollisionParent*> collisionObjects;
     HPlayerController* curController = nullptr;
+    float curDeleteTime = 3.0f;
+    float maxDeleteTime = 3.0f;
 };

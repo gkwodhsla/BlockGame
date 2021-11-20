@@ -8,6 +8,7 @@
 #include "../Actors/BreakableBrick.h"
 #include "../Actors/ScoreBoard.h"
 #include "../Actors/StageManager.h"
+#include "../Actors/Item.h"
 #include "../Components/CircleCollisionComponent.h"
 
 

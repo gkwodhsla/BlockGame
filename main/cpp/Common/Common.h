@@ -2,6 +2,7 @@
 
 #include <android/log.h>
 #include <cstdlib>
+#include <random>
 
 #define PRINT_LOG(str, type) \
 __android_log_print(ANDROID_LOG_INFO, "gles log" ,#type, str);
@@ -9,6 +10,9 @@ __android_log_print(ANDROID_LOG_INFO, "gles log" ,#type, str);
 class HLevelBase;
 namespace GlobalFunction
 {
+    //std::random_device rd;
+    //std::default_random_engine dre(rd());
+
     template<typename T>
     void* GetClassTypeUniqueID()
     {
@@ -66,4 +70,6 @@ namespace GlobalFunction
 
     HLevelBase* getLevel();
     char* readFile(const char* filePath, size_t& fileSize);
+    //float generateRandomFloat(const float r1, const float r2);
+    //bool generateRandomBool(float percentage); // 0.0f ~ 1.0f (0% ~ 100.0%)
 }

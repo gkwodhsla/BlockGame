@@ -2,6 +2,9 @@
 #include "../Components/ImageComponent.h"
 #include "../Components/CircleCollisionComponent.h"
 #include "../Components/MovementComponent.h"
+#include "../Levels/MainLevel.h"
+#include "../Actors/Item.h"
+#include "../Actors/BreakableBrick.h"
 
 const float Ball::ballSpeed = 400.0f;
 
@@ -13,10 +16,18 @@ Ball::Ball()
     collisionComp = createComponent<CircleCollisionComponent>(0.0f, this);
     collisionComp->attachTo(rootComponent);
 
-    collisionComp->registerCollisionResponse([this](HActor*)
-                                                     {
-
-                                                     });
+    collisionComp->registerCollisionResponse([this](HActor* other)
+    {
+        auto level = GlobalFunction::Cast<MainLevel>(GlobalFunction::getLevel());
+        auto block = GlobalFunction::Cast<BreakableBrick>(other);
+        if(level && block)//&& GlobalFunction::generateRandomBool(0.5f))
+        {
+            auto newItem = level->spawnActor<Item>("images/ballItem.png", whichItem::BALL);
+            auto thisCurLoc = this->getActorWorldLocation();
+            newItem->setActorWorldLocation(thisCurLoc.first, thisCurLoc.second);
+            newItem->setActorWorldScale(50.0f, 20.0f);
+        }
+    });
 
     ballMovement = createComponent<MovementComponent>(this);
     ballMovement->setSpeed(ballSpeed);
