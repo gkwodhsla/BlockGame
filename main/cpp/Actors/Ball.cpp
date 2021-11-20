@@ -20,9 +20,10 @@ Ball::Ball()
     {
         auto level = GlobalFunction::Cast<MainLevel>(GlobalFunction::getLevel());
         auto block = GlobalFunction::Cast<BreakableBrick>(other);
-        if(level && block)//&& GlobalFunction::generateRandomBool(0.5f))
+        if(level && block && GlobalFunction::generateRandomBool(0.5f))
         {
-            auto newItem = level->spawnActor<Item>("images/ballItem.png", whichItem::BALL);
+            int which = GlobalFunction::generateRandomInt(0, 2);
+            auto newItem = level->spawnActor<Item>((whichItem)which);
             auto thisCurLoc = this->getActorWorldLocation();
             newItem->setActorWorldLocation(thisCurLoc.first, thisCurLoc.second);
             newItem->setActorWorldScale(50.0f, 20.0f);

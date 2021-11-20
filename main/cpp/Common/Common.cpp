@@ -4,6 +4,9 @@
 #include <android/asset_manager.h>
 #include <android/asset_manager_jni.h>
 
+std::random_device GlobalFunction::rd;
+std::default_random_engine GlobalFunction::dre(GlobalFunction::rd());
+
 HLevelBase * GlobalFunction::getLevel()
 {
     return Framework::curLevel;
@@ -22,10 +25,16 @@ char* GlobalFunction::readFile(const char* filePath, size_t& fileSize)
     return buffer;
 }
 
-/*float GlobalFunction::generateRandomFloat(const float r1, const float r2)
+int GlobalFunction::generateRandomInt(const int r1, const int r2)
+{
+    std::uniform_int_distribution<> uid(r1, r2);
+    return uid(dre);
+}
+
+float GlobalFunction::generateRandomFloat(const float r1, const float r2)
 {
     std::uniform_real_distribution<> urd(r1, r2);
-    return urd(dre);
+    return (float)urd(dre);
 }
 
 bool GlobalFunction::generateRandomBool(float percentage)
@@ -33,4 +42,3 @@ bool GlobalFunction::generateRandomBool(float percentage)
     std::bernoulli_distribution bd(percentage);
     return bd(dre);
 }
- */

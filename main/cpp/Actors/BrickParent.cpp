@@ -4,10 +4,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
-std::random_device BrickParent::rd;
-std::default_random_engine BrickParent::dre(BrickParent::rd());
-std::uniform_real_distribution<> BrickParent::urd(0.0f, 5.0f);
-
 BrickParent::BrickParent()
 {
     collisionComp = createComponent<BoxCollisionComponent>(1.0f, 1.0f, this);
@@ -59,7 +55,7 @@ void BrickParent::changeBallDirVec(HActor* me, HActor* other)
             {
                 isHitFlat = false;
                 auto rotateMat =
-                        glm::rotate(glm::mat4(1.0f), glm::radians(135.0f + (float)BrickParent::urd(BrickParent::dre)),
+                        glm::rotate(glm::mat4(1.0f), glm::radians(135.0f /*+ (float)BrickParent:*/),
                                     glm::vec3(0.0f,0.0f,1.0f));
                 auto ballNewDir=glm::vec4(0.0f,1.0f,0.0f,1.0f)*rotateMat;
                 ball->setActorDirectionalVector(glm::vec2(ballNewDir.x, ballNewDir.y));
@@ -68,7 +64,7 @@ void BrickParent::changeBallDirVec(HActor* me, HActor* other)
             {
                 isHitFlat = false;
                 auto rotateMat =
-                        glm::rotate(glm::mat4(1.0f), glm::radians(45.0f + (float)BrickParent::urd(BrickParent::dre)),
+                        glm::rotate(glm::mat4(1.0f), glm::radians(45.0f + GlobalFunction::generateRandomFloat(1.0f, 5.0f)),
                                     glm::vec3(0.0f,0.0f,1.0f));
                 auto ballNewDir=glm::vec4(0.0f,1.0f,0.0f,1.0f)*rotateMat;
                 ball->setActorDirectionalVector(glm::vec2(ballNewDir.x, ballNewDir.y));
@@ -77,7 +73,7 @@ void BrickParent::changeBallDirVec(HActor* me, HActor* other)
             {
                 isHitFlat = false;
                 auto rotateMat =
-                        glm::rotate(glm::mat4(1.0f), glm::radians(-135.0f + (float)BrickParent::urd(BrickParent::dre)),
+                        glm::rotate(glm::mat4(1.0f), glm::radians(-135.0f + GlobalFunction::generateRandomFloat(1.0f, 5.0f)),
                                     glm::vec3(0.0f,0.0f,1.0f));
                 auto ballNewDir=glm::vec4(0.0f,1.0f,0.0f,1.0f)*rotateMat;
                 ball->setActorDirectionalVector(glm::vec2(ballNewDir.x, ballNewDir.y));
@@ -86,7 +82,7 @@ void BrickParent::changeBallDirVec(HActor* me, HActor* other)
             {
                 isHitFlat = false;
                 auto rotateMat =
-                        glm::rotate(glm::mat4(1.0f), glm::radians(-45.0f + (float)BrickParent::urd(BrickParent::dre)),
+                        glm::rotate(glm::mat4(1.0f), glm::radians(-45.0f + GlobalFunction::generateRandomFloat(1.0f, 5.0f)),
                                     glm::vec3(0.0f,0.0f,1.0f));
                 auto ballNewDir=glm::vec4(0.0f,1.0f,0.0f,1.0f)*rotateMat;
                 ball->setActorDirectionalVector(glm::vec2(ballNewDir.x, ballNewDir.y));

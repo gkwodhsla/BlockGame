@@ -7,7 +7,7 @@ class MovementComponent;
 
 enum class whichItem
 {
-    BALL,
+    BALL = 0,
     EXPAND,
     SHRINK
 };
@@ -18,7 +18,7 @@ public:
     Item() = delete;
     Item(const Item&) = delete;
     Item&operator=(const Item&) = delete;
-    Item(const char* filePath, const whichItem& whatItem);
+    Item(const whichItem& whatItem);
     virtual ~Item();
 
 public:

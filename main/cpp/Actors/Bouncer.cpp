@@ -61,6 +61,40 @@ void Bouncer::render()
 void Bouncer::update(const float deltaTime)
 {
     HPawn::update(deltaTime);
+    auto curSize = getActorWorldScale();
+    switch (curState)
+    {
+        case barState::STATIC:
+            break;
+        case barState::EXPAND:
+            if(curSize.first < targetSize)
+            {
+                curSize.first += deltaTime * animSpeed;
+                setActorWorldScale(curSize.first, curSize.second);
+            }
+            else
+            {
+                curSize.first = targetSize;
+                curSize.first += deltaTime * animSpeed;
+                setActorWorldScale(curSize.first, curSize.second);
+                curState = barState::STATIC;
+            }
+            break;
+        case barState::SHRINK:
+            if(curSize.first > targetSize)
+            {
+                curSize.first -= deltaTime * animSpeed;
+                setActorWorldScale(curSize.first, curSize.second);
+            }
+            else
+            {
+                curSize.first = targetSize;
+                curSize.first -= deltaTime * animSpeed;
+                setActorWorldScale(curSize.first, curSize.second);
+                curState = barState::STATIC;
+            }
+            break;
+    }
 }
 
 void Bouncer::handleEvent(const Event &e)
@@ -83,5 +117,25 @@ void Bouncer::handleEvent(const Event &e)
             befPos.second = e.yPos;
             break;
         }
+    }
+}
+
+void Bouncer::beginExpandingBar()
+{
+    float curSize = getActorWorldScale().first;
+    if(curSize < 300.0f)
+    {
+        curState = barState::EXPAND;
+        targetSize = curSize + barSizeDelta;
+    }
+}
+
+void Bouncer::beginShrinkingBar()
+{
+    float curSize = getActorWorldScale().first;
+    if(curSize > 100.0f)
+    {
+        curState = barState::SHRINK;
+        targetSize = curSize - barSizeDelta;
     }
 }
