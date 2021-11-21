@@ -6,7 +6,7 @@
 #include <android/asset_manager_jni.h>
 #include <cstring>
 
-float ImageComponent::rect[] =
+const float ImageComponent::rect[] =
         {
                 -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
                 -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,

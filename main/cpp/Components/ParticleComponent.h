@@ -11,6 +11,7 @@ public:
     ParticleComponent(const char *filePath, HActor*owner, const bool isCreateMipmap, GLbitfield magFilter,
                       GLbitfield minFilter, const GLbitfield wrappingModeS, const GLbitfield wrappingModeT);
     ParticleComponent&operator=(const ParticleComponent&) = delete;
+    virtual ~ParticleComponent();
 
 public:
     void render() override;
@@ -21,9 +22,12 @@ public:
     void setVelRange(const std::pair<float, float>& xVel, const std::pair<float, float>& yVel);
     void setAccRange(const std::pair<float, float>& xAcc, const std::pair<float, float>& yAcc);
     void setParticleNum(size_t num);
-    void setLifeTime(const float lifeTime);
+    void setLifeTime(const float time);
     void changeParticleImg(const char* filePath, const bool isCreateMipmap, const GLbitfield magFilter,
                            const GLbitfield minFilter, const GLbitfield wrappingModeS, const GLbitfield wrappingModeT);
+
+private:
+    void setNewParticleData();
 
 private:
     std::pair<float, float> xPosRange = {0.0f, 0.0f};
@@ -34,7 +38,9 @@ private:
     std::pair<float, float> yAccRange = {0.0f, 0.0f};
     size_t particleNum = 0;
     float lifeTime = 0.0f;
+    GLuint rectVBO = 0;
     GLuint velVBO = 0;
     GLuint accelVBO = 0;
     PNG* particleImg = nullptr;
+    static const float rect[];
 };

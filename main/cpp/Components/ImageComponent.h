@@ -1,7 +1,7 @@
 #pragma once
 #include "HPrimitiveComponent.h"
 
-class PNG final
+class PNG final : public HObject
 {
 public:
     PNG() = delete;
@@ -54,7 +54,7 @@ public:
 
 private:
     GLuint VBO;
-    static float rect[];
+    static const float rect[];
     PNG* png = nullptr;
     bool isTintEnabled = false;
     float tintR = 0.0f;

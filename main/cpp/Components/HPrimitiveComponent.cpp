@@ -35,6 +35,9 @@ void HPrimitiveComponent::render()
 
     auto isFontDrawLoc = glGetUniformLocation(Framework::curRenderer->getProgramID(), "isDrawFont");
     glUniform1i(isFontDrawLoc, false);
+
+    auto isParticleLoc = glGetUniformLocation(Framework::curRenderer->getProgramID(), "isInstanceDraw");
+    glUniform1i(isParticleLoc, false);
 }
 
 void HPrimitiveComponent::setVisibility(const bool isVisible)
