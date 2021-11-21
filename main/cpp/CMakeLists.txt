@@ -47,6 +47,7 @@ add_library(gles3jni SHARED
         Components/CircleCollisionComponent.cpp
         Components/MovementComponent.cpp
         Components/TTFComponent.cpp
+        Components/ParticleComponent.cpp
         Controllers/HPlayerController.cpp
         Levels/HLevelBase.cpp
         Levels/MainLevel.cpp
