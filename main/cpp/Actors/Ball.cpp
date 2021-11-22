@@ -2,6 +2,7 @@
 #include "../Components/ImageComponent.h"
 #include "../Components/CircleCollisionComponent.h"
 #include "../Components/MovementComponent.h"
+#include "../Components/ParticleComponent.h"
 #include "../Levels/MainLevel.h"
 #include "../Actors/Item.h"
 #include "../Actors/BreakableBrick.h"

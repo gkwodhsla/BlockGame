@@ -5,6 +5,7 @@ in vec2 inputTexPos;
 
 in vec2 vel;
 in vec2 acc;
+in vec2 addPos;
 
 out vec2 v_TexPos;
 
@@ -40,8 +41,8 @@ void main()
         }
         float xPos = vel.x * t + 0.5f * acc.x * t * t;
         float yPos = vel.y * t + 0.5f * acc.y * t * t;
-        mat4 transMat = mat4(1.0f, 0.0f, 0.0f, xPos,
-                               0.0f, 1.0f, 0.0f, yPos,
+        mat4 transMat = mat4(1.0f, 0.0f, 0.0f, xPos + addPos.x,
+                               0.0f, 1.0f, 0.0f, yPos + addPos.y,
                                0.0f, 0.0f, 1.0f, 0.0f,
                                0.0f, 0.0f, 0.0f, 1.0f);
         transMat = transpose(transMat);

@@ -6,7 +6,7 @@ class PNG;
 class ParticleComponent: public HPrimitiveComponent
 {
 public:
-    ParticleComponent() = delete;
+    ParticleComponent(HActor* owner);
     ParticleComponent(const ParticleComponent&) = delete;
     ParticleComponent(const char *filePath, HActor*owner, const bool isCreateMipmap, GLbitfield magFilter,
                       GLbitfield minFilter, const GLbitfield wrappingModeS, const GLbitfield wrappingModeT);
@@ -26,6 +26,9 @@ public:
     void setRepeat(bool isParticleRepeat);
     void changeParticleImg(const char* filePath, const bool isCreateMipmap, const GLbitfield magFilter,
                            const GLbitfield minFilter, const GLbitfield wrappingModeS, const GLbitfield wrappingModeT);
+    void changeParticleImg(PNG* png);
+    void play();
+    void stop();
 
 private:
     void setNewParticleData();
@@ -41,8 +44,11 @@ private:
     float lifeTime = 0.0f;
     GLuint rectVBO = 0;
     GLuint velVBO = 0;
+    GLuint posVBO = 0;
     GLuint accelVBO = 0;
     PNG* particleImg = nullptr;
     bool isRepeat = false;
+    bool isPlay = false;
+    float accTime = 0.0f;
     static const float rect[];
 };

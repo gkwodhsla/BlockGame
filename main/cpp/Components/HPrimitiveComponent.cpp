@@ -38,9 +38,6 @@ void HPrimitiveComponent::render()
 
     auto isParticleLoc = glGetUniformLocation(Framework::curRenderer->getProgramID(), "isInstanceDraw");
     glUniform1i(isParticleLoc, false);
-
-    auto gTimeLoc = glGetUniformLocation(Framework::curRenderer->getProgramID(), "gTime");
-    glUniform1f(gTimeLoc, Framework::accTime);
 }
 
 void HPrimitiveComponent::setVisibility(const bool isVisible)
