@@ -275,7 +275,7 @@ void ParticleComponent::setNewParticleData()
                                  GL_MAP_WRITE_BIT|GL_MAP_INVALIDATE_BUFFER_BIT);
     memcpy(ptr, times, sizeof(float)*particleNum);
     glUnmapBuffer(GL_ARRAY_BUFFER);
-//    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float)*particleNum, times);
+
     ptr = nullptr;
     delete[] velData;
     delete[] accData;

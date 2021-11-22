@@ -26,9 +26,9 @@ void MainLevel::enterGameWorld()
 {
     createBaseObject();
 
-    auto board = spawnActor<ScoreBoard>();
-    board->setActorWorldLocation(-100.0f, 0.0f);
-    board->setActorWorldScale(0.5f,0.5f);
+    //auto board = spawnActor<ScoreBoard>();
+    //board->setActorWorldLocation(-100.0f, 0.0f);
+    //board->setActorWorldScale(0.5f,0.5f);
 
     auto stage = spawnActor<StageManager>();
     stage->setGameMap();

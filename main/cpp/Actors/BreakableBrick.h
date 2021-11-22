@@ -13,7 +13,6 @@ class ParticleComponent;
 class BreakableBrick: public BrickParent
 {
 public:
-    BreakableBrick(const char* imgPath);
     BreakableBrick();
     BreakableBrick(const BreakableBrick&) = delete;
     BreakableBrick&operator=(const BreakableBrick&) = delete;

@@ -11,16 +11,16 @@ PNG* BreakableBrick::greenImage = nullptr;
 PNG* BreakableBrick::orangeImage = nullptr;
 PNG* BreakableBrick::purpleImage = nullptr;
 
-float BreakableBrick::xPosMin = -10.0f;
-float BreakableBrick::xPosMax = 10.0f;
-float BreakableBrick::yPosMin = -10.0f;
-float BreakableBrick::yPosMax = 10.0f;
-float BreakableBrick::xVelMin = -10.0f;
-float BreakableBrick::xVelMax = 10.0f;
-float BreakableBrick::yVelMin = -20.0f;
-float BreakableBrick::yVelMax = 40.0f;
-float BreakableBrick::xAccMin = -10.0f;
-float BreakableBrick::xAccMax = 10.0f;
+float BreakableBrick::xPosMin = -25.0f;
+float BreakableBrick::xPosMax = 25.0f;
+float BreakableBrick::yPosMin = 0.0f;
+float BreakableBrick::yPosMax = 3.0f;
+float BreakableBrick::xVelMin = -30.0f;
+float BreakableBrick::xVelMax = 30.0f;
+float BreakableBrick::yVelMin = 0.0f;
+float BreakableBrick::yVelMax = 1.0f;
+float BreakableBrick::xAccMin = -50.0f;
+float BreakableBrick::xAccMax = 50.0f;
 float BreakableBrick::yAccMin = -500.0f;
 float BreakableBrick::yAccMax = -300.0f;
 float BreakableBrick::particleLifeTime = 2.0f;
@@ -56,22 +56,7 @@ BreakableBrick::BreakableBrick()
     particle->setRepeat(false);
     particle->attachTo(rootComponent);
     particle->setComponentLocalScale({5.0f, 5.0f});
-}
 
-BreakableBrick::BreakableBrick(const char *imgPath)
-{
-    brickImage = createComponent<ImageComponent>(imgPath, this);
-    brickImage->attachTo(rootComponent);
-    collisionComp->registerCollisionResponse([this](HActor* other)
-                                             {
-                                                 if(GlobalFunction::Cast<Ball>(other))
-                                                 {
-                                                     BrickParent::changeBallDirVec(this, other);
-                                                     this->setVisibility(false);
-                                                     isPlay = true;
-                                                     particle->play();
-                                                 }
-                                             });
 }
 
 BreakableBrick::~BreakableBrick()
@@ -96,6 +81,7 @@ void BreakableBrick::render()
     HActor::render();
     if(isPlay)
     {
+        bindVAO();
         particle->render();
     }
 }

@@ -53,6 +53,7 @@ public:
     bool getIsSetLifeTime() const;
     void setPendingKill(const bool newPendingKill);
     bool getPendingKill() const;
+    void bindVAO(){glBindVertexArray(VAO);}
 
 protected:
     HSceneComponent* rootComponent;

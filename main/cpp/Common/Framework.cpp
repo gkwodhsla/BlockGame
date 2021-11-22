@@ -141,6 +141,7 @@ Java_com_example_blockgame_GLESNativeLib_draw(JNIEnv* env, jobject obj)
     frameworkInst->update(Framework::deltaTime);
     frameworkInst->render();
     std::chrono::duration<double> sec = std::chrono::system_clock::now() - start;
+    PRINT_LOG(1.0f/Framework::deltaTime, %f);
     Framework::accTime += sec.count();
     Framework::deltaTime = sec.count();
 }
