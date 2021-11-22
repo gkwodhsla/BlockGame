@@ -13,9 +13,30 @@ const float ParticleComponent::rect[] =
                 0.5f, 0.5f, 0.0f, 1.0f, 1.0f//위에 사각형
         };
 
-ParticleComponent::ParticleComponent(HActor *owner)
+ParticleComponent::ParticleComponent(HActor *owner, int particleNum)
 {
+    this->particleNum = particleNum;
     setOwner(owner);
+    glGenBuffers(1, &rectVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, rectVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(rect), rect, GL_STATIC_DRAW);
+    setAffectScaleFromParent(false);
+
+    glGenBuffers(1, &velVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, velVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2)*particleNum, nullptr, GL_DYNAMIC_DRAW);
+
+    glGenBuffers(1, &accelVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, accelVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2)*particleNum, nullptr, GL_DYNAMIC_DRAW);
+
+    glGenBuffers(1, &posVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, posVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2)*particleNum, nullptr, GL_DYNAMIC_DRAW);
+
+    glGenBuffers(1, &lifeTimeVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, lifeTimeVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float)*particleNum, nullptr, GL_DYNAMIC_DRAW);
 }
 ParticleComponent::ParticleComponent(const char *filePath, HActor *owner, const bool isCreateMipmap,
                                      GLbitfield magFilter, GLbitfield minFilter,
@@ -28,7 +49,7 @@ ParticleComponent::ParticleComponent(const char *filePath, HActor *owner, const 
     glBindBuffer(GL_ARRAY_BUFFER, rectVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(rect), rect, GL_STATIC_DRAW);
     setAffectScaleFromParent(false);
-    setComponentLocalScale(std::make_pair(5.0f, 5.0f));
+    //setComponentLocalScale(std::make_pair(5.0f, 5.0f));
 }
 
 ParticleComponent::~ParticleComponent()
@@ -70,9 +91,6 @@ void ParticleComponent::render()
         auto gTimeLoc = glGetUniformLocation(programID, "gTime");
         glUniform1f(gTimeLoc, accTime);
 
-        auto lifeLoc = glGetUniformLocation(programID, "lifeTime");
-        glUniform1f(lifeLoc, lifeTime);
-
         auto texLoc = glGetUniformLocation(programID, "uTexCoord");
         glUniform1i(texLoc, 0); //여기 0은 GL_TEXTURE0을 의미한다. 텍스처슬롯!
         glActiveTexture(GL_TEXTURE0);
@@ -95,6 +113,12 @@ void ParticleComponent::render()
         glBindBuffer(GL_ARRAY_BUFFER, posVBO);
         glVertexAttribPointer(posLoc, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (GLvoid*)0);
         glVertexAttribDivisor(posLoc, 1);
+
+        auto lifeLoc = glGetAttribLocation(programID, "lifeTime");
+        glEnableVertexAttribArray(lifeLoc);
+        glBindBuffer(GL_ARRAY_BUFFER, lifeTimeVBO);
+        glVertexAttribPointer(lifeLoc, 1, GL_FLOAT, GL_FALSE, sizeof(float) * 1, (GLvoid*)0);
+        glVertexAttribDivisor(lifeLoc, 1);
 
         glDrawArraysInstanced(GL_TRIANGLES, 0, 6, particleNum);
     }
@@ -138,6 +162,41 @@ void ParticleComponent::setAccRange(const std::pair<float, float> &xAcc,
 void ParticleComponent::setParticleNum(size_t num)
 {
     particleNum = num;
+    if(rectVBO)
+    {
+        glDeleteBuffers(1, &rectVBO);
+        rectVBO = 0;
+    }
+    if(velVBO)
+    {
+        glDeleteBuffers(1, &velVBO);
+        velVBO = 0;
+    }
+    if(accelVBO)
+    {
+        glDeleteBuffers(1, &accelVBO);
+        accelVBO = 0;
+    }
+    if(posVBO)
+    {
+        glDeleteBuffers(1, &posVBO);
+        posVBO = 0;
+    }
+    glGenBuffers(1, &velVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, velVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2)*particleNum, nullptr, GL_DYNAMIC_DRAW);
+
+    glGenBuffers(1, &accelVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, accelVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2)*particleNum, nullptr, GL_DYNAMIC_DRAW);
+
+    glGenBuffers(1, &posVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, posVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2)*particleNum, nullptr, GL_DYNAMIC_DRAW);
+
+    glGenBuffers(1, &lifeTimeVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, lifeTimeVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float)*particleNum, nullptr, GL_DYNAMIC_DRAW);
     setNewParticleData();
 }
 
@@ -178,19 +237,11 @@ void ParticleComponent::stop()
 
 void ParticleComponent::setNewParticleData()
 {
-    if(velVBO)
-    {
-        glDeleteBuffers(1, &velVBO);
-        velVBO = 0;
-    }
-    if(accelVBO)
-    {
-        glDeleteBuffers(1, &accelVBO);
-        accelVBO = 0;
-    }
     auto* velData = new glm::vec2[particleNum];
     auto* accData = new glm::vec2[particleNum];
     auto* posData = new glm::vec2[particleNum];
+    auto* times = new float[particleNum];
+
     for(int i=0;i<particleNum;++i)
     {
         velData[i].x = GlobalFunction::generateRandomFloat(xVelRange.first, xVelRange.second);
@@ -199,20 +250,36 @@ void ParticleComponent::setNewParticleData()
         accData[i].y = GlobalFunction::generateRandomFloat(yAccRange.first, yAccRange.second);
         posData[i].x = GlobalFunction::generateRandomFloat(xPosRange.first, xPosRange.second);
         posData[i].y = GlobalFunction::generateRandomFloat(xPosRange.first, xPosRange.second);
+        times[i] = GlobalFunction::generateRandomFloat(0.0f, lifeTime);
     }
-
-    glGenBuffers(1, &velVBO);
     glBindBuffer(GL_ARRAY_BUFFER, velVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2)*particleNum, velData, GL_STATIC_DRAW);
+    void* ptr = glMapBufferRange(GL_ARRAY_BUFFER,0,sizeof(glm::vec2)*particleNum,
+                                 GL_MAP_WRITE_BIT|GL_MAP_INVALIDATE_BUFFER_BIT);
+    memcpy(ptr, velData, sizeof(glm::vec2)*particleNum);
+    glUnmapBuffer(GL_ARRAY_BUFFER);
 
-    glGenBuffers(1, &accelVBO);
     glBindBuffer(GL_ARRAY_BUFFER, accelVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2)*particleNum, accData, GL_STATIC_DRAW);
+    ptr = glMapBufferRange(GL_ARRAY_BUFFER,0,sizeof(glm::vec2)*particleNum,
+                                 GL_MAP_WRITE_BIT|GL_MAP_INVALIDATE_BUFFER_BIT);
+    memcpy(ptr, accData, sizeof(glm::vec2)*particleNum);
+    glUnmapBuffer(GL_ARRAY_BUFFER);
 
-    glGenBuffers(1, &posVBO);
     glBindBuffer(GL_ARRAY_BUFFER, posVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2)*particleNum, posData, GL_STATIC_DRAW);
+    ptr = glMapBufferRange(GL_ARRAY_BUFFER,0,sizeof(glm::vec2)*particleNum,
+                                 GL_MAP_WRITE_BIT|GL_MAP_INVALIDATE_BUFFER_BIT);
+    memcpy(ptr, posData, sizeof(glm::vec2)*particleNum);
+    glUnmapBuffer(GL_ARRAY_BUFFER);
 
+    glBindBuffer(GL_ARRAY_BUFFER, lifeTimeVBO);
+    ptr = glMapBufferRange(GL_ARRAY_BUFFER,0,sizeof(float)*particleNum,
+                                 GL_MAP_WRITE_BIT|GL_MAP_INVALIDATE_BUFFER_BIT);
+    memcpy(ptr, times, sizeof(float)*particleNum);
+    glUnmapBuffer(GL_ARRAY_BUFFER);
+//    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float)*particleNum, times);
+    ptr = nullptr;
     delete[] velData;
     delete[] accData;
+    delete[] posData;
+    delete[] times;
+
 }

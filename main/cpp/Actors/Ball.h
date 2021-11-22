@@ -4,6 +4,7 @@
 class CircleCollisionComponent;
 class ImageComponent;
 class MovementComponent;
+class ParticleComponent;
 class Ball: public HActor
 {
 public:
@@ -17,9 +18,12 @@ public:
     virtual void update(const float deltaTime) override;
     void setCollisionComp(float rad);
 
+public:
+    ParticleComponent* ballParticle = nullptr;
+
 private:
-    ImageComponent* ballImg;
-    CircleCollisionComponent* collisionComp;
-    MovementComponent* ballMovement;
+    ImageComponent* ballImg = nullptr;
+    CircleCollisionComponent* collisionComp = nullptr;
+    MovementComponent* ballMovement = nullptr;
     static const float ballSpeed;
 };

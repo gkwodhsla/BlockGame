@@ -23,7 +23,6 @@ public:
     static void update(const float deltaTime);
     static void render();
     static void changeLevel(HLevelBase* level);
-    static GLuint createPngTexture(const char*);
     static inline void conversionCoordToGLCoordSystem(float &x, float &y)
     {
         float ratioX = (float)Framework::screenWidth / 2.0f;

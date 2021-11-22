@@ -6,6 +6,7 @@ in vec2 inputTexPos;
 in vec2 vel;
 in vec2 acc;
 in vec2 addPos;
+in float lifeTime;
 
 out vec2 v_TexPos;
 
@@ -17,7 +18,6 @@ uniform bool isDrawFont;
 uniform bool isInstanceDraw;
 uniform bool isRepeat;
 uniform float gTime;
-uniform float lifeTime;
 
 
 void main()
@@ -39,16 +39,23 @@ void main()
         {
             t = gTime;
         }
-        float xPos = vel.x * t + 0.5f * acc.x * t * t;
-        float yPos = vel.y * t + 0.5f * acc.y * t * t;
-        mat4 transMat = mat4(1.0f, 0.0f, 0.0f, xPos + addPos.x,
-                               0.0f, 1.0f, 0.0f, yPos + addPos.y,
-                               0.0f, 0.0f, 1.0f, 0.0f,
-                               0.0f, 0.0f, 0.0f, 1.0f);
-        transMat = transpose(transMat);
-        mat4 MVP = projTrans*cameraTrans*transMat*worldTrans;
-        vec4 retVal = MVP*position;
-        gl_Position = retVal;
+        if(t <= lifeTime)
+        {
+            float xPos = vel.x * t + 0.5f * acc.x * t * t;
+            float yPos = vel.y * t + 0.5f * acc.y * t * t;
+            mat4 transMat = mat4(1.0f, 0.0f, 0.0f, xPos + addPos.x,
+                                 0.0f, 1.0f, 0.0f, yPos + addPos.y,
+                                 0.0f, 0.0f, 1.0f, 0.0f,
+                                 0.0f, 0.0f, 0.0f, 1.0f);
+            transMat = transpose(transMat);
+            mat4 MVP = projTrans*cameraTrans*transMat*worldTrans;
+            vec4 retVal = MVP*position;
+            gl_Position = retVal;
+        }
+        else
+        {
+            gl_Position = vec4(-9999.0f, -9999.0f, 0.0f, 1.0f);
+        }
     }
     v_TexPos = inputTexPos;
 }

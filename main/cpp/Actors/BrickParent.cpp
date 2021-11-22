@@ -1,5 +1,6 @@
 #include "BrickParent.h"
 #include "../Components/BoxCollisionComponent.h"
+#include "../Components/ParticleComponent.h"
 #include "Ball.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
@@ -97,6 +98,9 @@ void BrickParent::changeBallDirVec(HActor* me, HActor* other)
             }
             auto ballDirVec = ball->getActorDirectionalVector();
             ball->setActorWorldLocation(ballPos.first + ballDirVec.x * 5.0f, ballPos.second + ballDirVec.y * 5.0f);
+
+
+
         }
     }
 }

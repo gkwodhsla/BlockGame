@@ -156,7 +156,7 @@ void HSceneComponent::updateComponentWorldScale()
         worldScale.first = localScale.first * parent->getComponentWorldScale().first;
         worldScale.second = localScale.first * parent->getComponentWorldScale().second;
     }
-    else if(!parent || (parent && !isUsingParentRotation)) //부모가 없다면 루트 컴포넌트이다.
+    else if(!parent || (parent && !isUsingParentScale)) //부모가 없다면 루트 컴포넌트이다.
     {
         worldScale = localScale;
     }

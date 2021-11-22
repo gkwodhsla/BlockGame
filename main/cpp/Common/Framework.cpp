@@ -67,7 +67,7 @@ void Framework::init(const char* VSPath, const char* FSPath)
     curRenderer->addClearBit(GL_DEPTH_BUFFER_BIT);
     curRenderer->enableGLFeature(GL_DEPTH_TEST);
     curRenderer->enableGLFeature(GL_BLEND);
-    curRenderer->setClearColor(0.0f,1.0f,1.0f,1.0f);
+    curRenderer->setClearColor(0.0f,0.0f,0.0f,0.0f);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     curLevel = GlobalFunction::createNewObject<MainLevel>();
@@ -93,39 +93,6 @@ void Framework::render()
     curLevel->render();
     //씬 렌더링 그리기 전에 update를 호출해야 한다.
     //그러니까 es의 view renderer에서 onDrawFrame이 호출되면 호출되는 함수를 지정해놓고 해당 함수에서 작업을 하게끔!
-}
-
-GLuint Framework::createPngTexture(const char* filePath)
-{
-    AAsset* rawImage = AAssetManager_open(Framework::assetMng, filePath, AASSET_MODE_UNKNOWN);
-    char* buffer = nullptr;
-    size_t fileSize = AAsset_getLength(rawImage);
-    buffer = new char[fileSize];
-    memset(buffer,0,fileSize);
-    AAsset_read(rawImage, buffer, fileSize);
-    AAsset_close(rawImage);
-
-    std::vector<unsigned char> image;
-    unsigned width, height;
-    auto data = std::vector<unsigned char>(buffer, buffer+fileSize);
-    unsigned error = lodepng::decode(image, width, height, data);
-    if (error != 0)
-    {
-        PRINT_LOG(lodepng_error_text(error), %s);
-        return -1;
-    }
-
-    GLuint temp;
-    glGenTextures(1, &temp);
-
-    glBindTexture(GL_TEXTURE_2D, temp);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &image[0]);
-
-    delete[] buffer;
-    buffer = nullptr;
-    return temp;
 }
 
 void Framework::changeLevel(HLevelBase* level)

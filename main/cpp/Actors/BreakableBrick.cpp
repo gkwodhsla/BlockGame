@@ -24,7 +24,7 @@ float BreakableBrick::xAccMax = 10.0f;
 float BreakableBrick::yAccMin = -500.0f;
 float BreakableBrick::yAccMax = -300.0f;
 float BreakableBrick::particleLifeTime = 2.0f;
-int BreakableBrick::particleNum = 50;
+int BreakableBrick::particleNum = 100;
 
 BreakableBrick::BreakableBrick()
 {
@@ -48,15 +48,14 @@ BreakableBrick::BreakableBrick()
                                                      particle->play();
                                                  }
                                              });
-    particle = createComponent<ParticleComponent>(this);
+    particle = createComponent<ParticleComponent>(this, particleNum);
     particle->setPosRange(std::make_pair(xPosMin, xPosMax), std::make_pair(yPosMin, yPosMax));
     particle->setVelRange(std::make_pair(xVelMin, xVelMax), std::make_pair(yVelMin, yVelMax));
     particle->setAccRange(std::make_pair(xAccMin, xAccMax), std::make_pair(yAccMin, yAccMax));
     particle->setLifeTime(particleLifeTime);
     particle->setRepeat(false);
-    particle->setParticleNum(particleNum);
     particle->attachTo(rootComponent);
-    particle->setComponentLocalScale({0.1f, 0.1f});
+    particle->setComponentLocalScale({5.0f, 5.0f});
 }
 
 BreakableBrick::BreakableBrick(const char *imgPath)
