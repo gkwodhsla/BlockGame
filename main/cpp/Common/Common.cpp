@@ -17,9 +17,10 @@ char* GlobalFunction::readFile(const char* filePath, size_t& fileSize)
     AAsset* rawImage = AAssetManager_open(Framework::assetMng, filePath, AASSET_MODE_UNKNOWN);
     char* buffer = nullptr;
     fileSize = AAsset_getLength(rawImage);
-    buffer = new char[fileSize];
-    memset(buffer,0,fileSize);
+    buffer = new char[fileSize + 1];
+    memset(buffer,0,fileSize + 1);
     AAsset_read(rawImage, buffer, fileSize);
+    buffer[fileSize] = '\0';
     AAsset_close(rawImage);
 
     return buffer;

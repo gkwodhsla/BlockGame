@@ -6,7 +6,7 @@
 #include "../Actors/Item.h"
 #include "../Actors/BreakableBrick.h"
 
-const float Ball::ballSpeed = 400.0f;
+const float Ball::ballSpeed = 200.0f;
 
 Ball::Ball()
 {

@@ -47,6 +47,9 @@ public:
     static GLuint screenWidth;
     static GLuint screenHeight;
     static constexpr float rendererSize = 800.0f;
+    static float accTime;
+    static float deltaTime;
+
 private:
     static Framework* instance;
 };

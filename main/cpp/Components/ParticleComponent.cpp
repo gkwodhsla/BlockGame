@@ -1,5 +1,7 @@
 #include "ParticleComponent.h"
 #include "ImageComponent.h"
+#include "../Common/Framework.h"
+#include "../Common/Renderer.h"
 
 const float ParticleComponent::rect[] =
         {
@@ -45,6 +47,34 @@ ParticleComponent::~ParticleComponent()
 void ParticleComponent::render()
 {
     HPrimitiveComponent::render();
+    auto programID=Framework::curRenderer->getProgramID();
+    auto isParticleLoc = glGetUniformLocation(programID, "isInstanceDraw");
+    glUniform1i(isParticleLoc, true);
+
+    auto isRepeatLoc = glGetUniformLocation(programID, "isRepeat");
+    glUniform1i(isRepeatLoc, isRepeat);
+
+    auto lifeLoc = glGetUniformLocation(programID, "lifeTime");
+    glUniform1f(lifeLoc, lifeTime);
+
+    auto texLoc = glGetUniformLocation(programID, "uTexCoord");
+    glUniform1i(texLoc, 0); //여기 0은 GL_TEXTURE0을 의미한다. 텍스처슬롯!
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, particleImg->getTextureID());
+
+    auto velLoc = glGetAttribLocation(programID, "vel");
+    glEnableVertexAttribArray(velLoc);
+    glBindBuffer(GL_ARRAY_BUFFER, velLoc);
+    glVertexAttribPointer(velLoc, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (GLvoid*)0);
+    glVertexAttribDivisor(velLoc, 1);
+
+    auto accLoc = glGetAttribLocation(programID, "acc");
+    glEnableVertexAttribArray(accLoc);
+    glBindBuffer(GL_ARRAY_BUFFER, accLoc);
+    glVertexAttribPointer(accLoc, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (GLvoid*)0);
+    glVertexAttribDivisor(accLoc, 1);
+
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 6, particleNum);
 }
 
 void ParticleComponent::update(const float deltaTime)
@@ -86,6 +116,11 @@ void ParticleComponent::setLifeTime(const float time)
 {
     lifeTime = time;
     setNewParticleData();
+}
+
+void ParticleComponent::setRepeat(bool isParticleRepeat)
+{
+    isRepeat = isParticleRepeat;
 }
 
 void ParticleComponent::changeParticleImg(const char *filePath, const bool isCreateMipmap,

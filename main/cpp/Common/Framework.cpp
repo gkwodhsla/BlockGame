@@ -16,6 +16,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/ext.hpp>
+#include <chrono>
 
 AAssetManager* Framework::assetMng = nullptr;
 Framework* Framework::instance = nullptr;
@@ -24,6 +25,8 @@ EventQ* Framework::eventQ = nullptr;
 HLevelBase* Framework::curLevel = nullptr;
 GLuint Framework::screenWidth = 0;
 GLuint Framework::screenHeight = 0;
+float Framework::accTime = 0.0f;
+float Framework::deltaTime= 0.0f;
 Framework* frameworkInst = nullptr;
 
 
@@ -163,13 +166,16 @@ Java_com_example_blockgame_GLESNativeLib_resize(JNIEnv* env, jobject obj, jint w
     Framework::screenWidth = width;
     Framework::screenHeight = height;
 }
-
 JNIEXPORT void JNICALL
 Java_com_example_blockgame_GLESNativeLib_draw(JNIEnv* env, jobject obj)
 {
+    std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
     frameworkInst->handleEvent();
-    frameworkInst->update(0.016f);
+    frameworkInst->update(Framework::deltaTime);
     frameworkInst->render();
+    std::chrono::duration<double> sec = std::chrono::system_clock::now() - start;
+    Framework::accTime += sec.count();
+    Framework::deltaTime = sec.count();
 }
 
 JNIEXPORT void JNICALL

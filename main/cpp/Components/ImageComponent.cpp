@@ -35,11 +35,11 @@ ImageComponent::ImageComponent(const char *filePath, HActor*owner, const bool is
     glUnmapBuffer(GL_ARRAY_BUFFER);
     ptr = nullptr;
 
-    GLuint attribLoc1 = glGetAttribLocation(Framework::curRenderer->getProgramID(), "position");
+    auto attribLoc1 = glGetAttribLocation(Framework::curRenderer->getProgramID(), "position");
     glEnableVertexAttribArray(attribLoc1);
     glVertexAttribPointer(attribLoc1, 3, GL_FLOAT, GL_FALSE,sizeof(float)*5, (GLvoid*)0);
 
-    GLuint attribLoc2 = glGetAttribLocation(Framework::curRenderer->getProgramID(), "inputTexPos");
+    auto attribLoc2 = glGetAttribLocation(Framework::curRenderer->getProgramID(), "inputTexPos");
     glEnableVertexAttribArray(attribLoc2);
     glVertexAttribPointer(attribLoc2, 2, GL_FLOAT, GL_FALSE, sizeof(float)*5,(GLvoid*)(sizeof(float)*3));
 

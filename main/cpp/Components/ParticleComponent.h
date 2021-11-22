@@ -23,6 +23,7 @@ public:
     void setAccRange(const std::pair<float, float>& xAcc, const std::pair<float, float>& yAcc);
     void setParticleNum(size_t num);
     void setLifeTime(const float time);
+    void setRepeat(bool isParticleRepeat);
     void changeParticleImg(const char* filePath, const bool isCreateMipmap, const GLbitfield magFilter,
                            const GLbitfield minFilter, const GLbitfield wrappingModeS, const GLbitfield wrappingModeT);
 
@@ -42,5 +43,6 @@ private:
     GLuint velVBO = 0;
     GLuint accelVBO = 0;
     PNG* particleImg = nullptr;
+    bool isRepeat = false;
     static const float rect[];
 };
