@@ -32,7 +32,8 @@ Ball::Ball()
     });
 
     ballMovement = createComponent<MovementComponent>(this);
-    ballMovement->setSpeed(ballSpeed);
+    ballMovement->setMaxSpeed(ballSpeed);
+    ballMovement->setDeltaAccel(100.0f);
     this->setActorDirectionalVector(glm::vec2(0.0f,-1.0f));
 
     /*ballParticle = createComponent<ParticleComponent>("images/ballParticle.png", this, true,

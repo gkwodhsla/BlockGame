@@ -10,7 +10,7 @@ public class GLESNativeLib
     }
     public static native void init();
     public static native void resize(int width, int height);
-    public static native void draw();
+    public static native void draw(float deltaTime);
     public static native void readAssetsNative(AssetManager AM);
     public static native void touchEventStart(float x, float y);
     public static native void touchEventMove(float x, float y);

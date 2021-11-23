@@ -1,6 +1,7 @@
 #include "MovementComponent.h"
 #include "../Actors/HActor.h"
 #include "HSceneComponent.h"
+#include "../Common/Framework.h"
 
 MovementComponent::MovementComponent(HActor* owner)
 {
@@ -12,36 +13,48 @@ void MovementComponent::update(const float deltaTime)
     updatePosition(deltaTime);
 }
 
-void MovementComponent::setSpeed(float speed)
+void MovementComponent::setMaxSpeed(const float speed)
 {
-    this->speed = speed;
+    this->maxSpeed = speed;
 }
 
-void MovementComponent::setAcceleration(const std::pair<float, float> &accel)
+void MovementComponent::setMaxAcceleration(const float accel)
 {
-    acceleration = accel;
+    maxAcceleration = accel;
 }
 
 void MovementComponent::updatePosition(const float deltaTime)
 {
+    curAccel = befAccel + deltaAccel*deltaTime;
+    if(curAccel>=maxAcceleration)
+    {
+        curAccel = maxAcceleration;
+    }
+    speed = befSpeed + befAccel * deltaTime;
+    if(speed>=maxSpeed)
+    {
+        speed = maxSpeed;
+    }
     HSceneComponent* ownerRootComp = owner->getRootComponent();
     auto dirVec = owner->getActorDirectionalVector();
-    auto initVelocity = std::make_pair(dirVec.x * speed, dirVec.y * speed);
+    auto velocity = std::make_pair(dirVec.x * speed, dirVec.y * speed);
     //속력은 방향벡터 * 속도이다.
 
     auto befPos = ownerRootComp->getComponentLocalLocation();
 
     std::pair<float, float> newPos;
 
-    newPos.first = befPos.first + (initVelocity.first * deltaTime)+
-            (0.5f * acceleration.first * deltaTime * deltaTime);
+    newPos.first = befPos.first + velocity.first * deltaTime;
 
-    newPos.second = befPos.second + (initVelocity.second * deltaTime)+
-                    (0.5f * acceleration.second * deltaTime * deltaTime);
+    newPos.second = befPos.second + velocity.second * deltaTime;
 
     ownerRootComp->setComponentLocalLocation(newPos);
-    //거리 = 이전 거리 + 초기 속도 * 시간 + (0.5 * 가속도 * 시간^2)
-    //여기에다가 방향벡터를 갱신하는 수식을 작성한다.
-    //현재 위치 - 이전 위치 하고 정규화
 
+    befAccel = curAccel;
+    befSpeed = speed;
+}
+
+void MovementComponent::setDeltaAccel(const float accel)
+{
+    deltaAccel = accel;
 }

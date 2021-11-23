@@ -14,8 +14,8 @@ Item::Item(const whichItem& whatItem)
     collisionComp = createComponent<BoxCollisionComponent>(1.0f,1.0f,this);
     collisionComp->attachTo(rootComponent);
     moveComp = createComponent<MovementComponent>(this);
-    moveComp->setAcceleration(std::make_pair(0.0f, gravAcc));
-    moveComp->setSpeed(initSpeed);
+    moveComp->setMaxAcceleration(50.0f);
+    moveComp->setMaxSpeed(initSpeed);
     switch (whatItem)
     {
         case whichItem::BALL:

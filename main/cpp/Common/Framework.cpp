@@ -114,7 +114,7 @@ extern "C"
 {
 JNIEXPORT void JNICALL Java_com_example_blockgame_GLESNativeLib_init(JNIEnv* env, jobject obj);
 JNIEXPORT void JNICALL Java_com_example_blockgame_GLESNativeLib_resize(JNIEnv* env, jobject obj, jint width, jint height);
-JNIEXPORT void JNICALL Java_com_example_blockgame_GLESNativeLib_draw(JNIEnv* env, jobject obj);
+JNIEXPORT void JNICALL Java_com_example_blockgame_GLESNativeLib_draw(JNIEnv* env, jobject obj, float deltaTime);
 JNIEXPORT void JNICALL Java_com_example_blockgame_GLESNativeLib_readAssetsNative(JNIEnv *env, jobject obj, jobject am);
 JNIEXPORT void JNICALL Java_com_example_blockgame_GLESNativeLib_touchEventStart(JNIEnv *env, jobject obj, float x, float y);
 JNIEXPORT void JNICALL Java_com_example_blockgame_GLESNativeLib_touchEventMove(JNIEnv *env, jobject obj, float x, float y);
@@ -133,17 +133,16 @@ Java_com_example_blockgame_GLESNativeLib_resize(JNIEnv* env, jobject obj, jint w
     Framework::screenWidth = width;
     Framework::screenHeight = height;
 }
+
 JNIEXPORT void JNICALL
-Java_com_example_blockgame_GLESNativeLib_draw(JNIEnv* env, jobject obj)
+Java_com_example_blockgame_GLESNativeLib_draw(JNIEnv* env, jobject obj, float deltaTime)
 {
-    std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
     frameworkInst->handleEvent();
-    frameworkInst->update(Framework::deltaTime);
+    frameworkInst->update(deltaTime);
     frameworkInst->render();
-    std::chrono::duration<double> sec = std::chrono::system_clock::now() - start;
-    PRINT_LOG(1.0f/Framework::deltaTime, %f);
-    Framework::accTime += sec.count();
-    Framework::deltaTime = sec.count();
+    PRINT_LOG(1/deltaTime, %f);
+    Framework::deltaTime = deltaTime;
+    Framework::accTime += deltaTime;
 }
 
 JNIEXPORT void JNICALL

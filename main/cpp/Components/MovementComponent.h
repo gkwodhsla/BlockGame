@@ -16,15 +16,21 @@ public:
     MovementComponent(HActor* owner);
     virtual ~MovementComponent() = default;
     virtual void update(const float deltaTime);
-    void setSpeed(float speed);
-    void setAcceleration(const std::pair<float, float>& accel);
+    void setMaxSpeed(const float speed);
+    void setMaxAcceleration(const float accel);
+    void setDeltaAccel(const float accel);
 
 private:
     void updatePosition(const float deltaTime);
 
 private:
-    std::pair<float, float> acceleration;
+    float maxAcceleration = 100.0f;
+    float curAccel = 0.0f;
     float speed = 0.0f;
+    float maxSpeed = 100.0f;
+    float befSpeed = 0.0f;
+    float befAccel = 0.0f;
+    float deltaAccel = 50.0f;
 };
 
 
