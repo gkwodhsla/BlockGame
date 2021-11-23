@@ -53,23 +53,25 @@ public class GLESView extends GLSurfaceView
         }
         return true;
     }
+    private static long beginTime = SystemClock.elapsedRealtime();
     private static float deltaTime = 0.0f;
     private static final float maxFPS = 1.0f / 60.0f;
     private static class Renderer implements GLSurfaceView.Renderer
     {
         public void onDrawFrame(GL10 gl)
         {
-            long befTime = SystemClock.elapsedRealtime();
             GLESNativeLib.draw(deltaTime);
             long afterTime = SystemClock.elapsedRealtime();
-            deltaTime = (float)(afterTime - befTime) / 1000.0f;
+            deltaTime = (float)(afterTime - beginTime) / 1000.0f;
             if(deltaTime < maxFPS)
             {
-                befTime = SystemClock.elapsedRealtime();
+                long befTime = SystemClock.elapsedRealtime();
                 SystemClock.sleep((long)((maxFPS - deltaTime)*1000));
                 afterTime = SystemClock.elapsedRealtime();
                 deltaTime += (float)(afterTime - befTime) / 1000.0f;
+
             }
+            beginTime += deltaTime * 1000.0f;
         }
 
         public void onSurfaceChanged(GL10 gl, int width, int height) { GLESNativeLib.resize(width, height); }
