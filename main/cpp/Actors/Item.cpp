@@ -3,6 +3,7 @@
 #include "../Components/ImageComponent.h"
 #include "../Components/BoxCollisionComponent.h"
 #include "../Components/MovementComponent.h"
+#include "../Levels/MainLevel.h"
 #include "Bouncer.h"
 #include "Ball.h"
 
@@ -23,6 +24,7 @@ Item::Item(const whichItem& whatItem)
                 if(GlobalFunction::Cast<Bouncer>(other))
                 {
                     auto ball = GlobalFunction::getLevel()->spawnActor<Ball>();
+                    GlobalFunction::Cast<MainLevel>(GlobalFunction::getLevel())->addBallCnt();
                     ball->setActorWorldScale(16.0f,16.0f);
                     ball->setActorWorldLocation(0.0f,-100.0f);
                     ball->setCollisionComp(10.0f);

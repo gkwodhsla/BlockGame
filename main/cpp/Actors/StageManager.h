@@ -22,7 +22,7 @@ public:
     int getCurStage(){return curStage+1;}
 
 private:
-    static constexpr int maxStage = 5;
+    static constexpr int maxStage = 10;
     static constexpr int mapSize = 15;
     static constexpr float boardYSize = 400.0f;
     static const float blockBeginYPos;

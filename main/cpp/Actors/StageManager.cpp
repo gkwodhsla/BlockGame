@@ -111,6 +111,7 @@ void StageManager::decRestBrick()
     if(restBricks == 0)
     {
         ++curStage;
+        curStage %= maxStage;
         GlobalFunction::Cast<MainLevel>(GlobalFunction::getLevel())->clearGameWorld();
     }
 };

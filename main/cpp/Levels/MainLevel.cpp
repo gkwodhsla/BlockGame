@@ -51,6 +51,7 @@ void MainLevel::update(const float deltaTime)
             isMsgTime = false;
             stageManager->setGameMap();
             Ball* ball = GlobalFunction::Cast<Ball>(spawnActor<Ball>());
+            addBallCnt();
             ball->setActorWorldScale(16.0f,16.0f);
             ball->setActorWorldLocation(0.0f,-200.0f);
             ball->setCollisionComp(10.0f);
@@ -94,6 +95,11 @@ void MainLevel::clearGameWorld()
            GlobalFunction::Cast<Item>(actor))
         {
             actor->destroyAction();
+        }
+        auto block = GlobalFunction::Cast<BreakableBrick>(actor);
+        if(block && block->getVisibility())
+        {
+            stageManager->returnToPool(block);
         }
     }//이전 스테이지의 아이템, 공들을 모두 제거한다.
     stageStartCoolTime = maxStageStartCoolTime;

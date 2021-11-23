@@ -64,8 +64,9 @@ void Ball::update(const float deltaTime)
 {
     HActor::update(deltaTime);
     ballMovement->update(deltaTime);
-    if(getActorWorldLocation().second <= deadLine)
+    if(getActorWorldLocation().second <= deadLine && visibility)
     {
+        GlobalFunction::Cast<MainLevel>(GlobalFunction::getLevel())->decBallCnt();
         destroyAction();
     }
     /*auto dirVec = getActorDirectionalVector() * -1.0f;

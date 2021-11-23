@@ -108,11 +108,11 @@ void Bouncer::handleEvent(const Event &e)
         case EVENT_TYPE::FINGER_SWIPE:
         {
             float curX = e.xPos - befPos.first;
-            float curY = e.yPos - befPos.second;
+            //float curY = e.yPos - befPos.second;
             curX*=400.0f;
-            curY*=400.0f;
+            //curY*=400.0f;
             auto curWorldLoc = getActorWorldLocation();
-            setActorWorldLocation(curWorldLoc.first+curX, curWorldLoc.second+curY);
+            setActorWorldLocation(curWorldLoc.first+curX, curWorldLoc.second);
             befPos.first = e.xPos;
             befPos.second = e.yPos;
             break;

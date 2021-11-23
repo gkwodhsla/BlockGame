@@ -19,6 +19,17 @@ public:
 
 public:
     void clearGameWorld();
+    void addBallCnt(){PRINT_LOG("incBall", %s);
+        ++ballCnt;}
+    void decBallCnt()
+    {
+        --ballCnt;
+        PRINT_LOG("decBall", %s);
+        if(ballCnt == 0)
+        {
+            clearGameWorld();
+        }
+    }
 
 public:
     StageManager* stageManager = nullptr;
@@ -31,6 +42,7 @@ private:
     bool isMsgTime = false;
     const float maxStageStartCoolTime = 2.0f;
     float stageStartCoolTime = 2.0f;
+    int ballCnt = 0;
 
 private:
     static constexpr float boardYSize = 400.0f;
