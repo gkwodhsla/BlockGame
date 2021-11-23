@@ -140,7 +140,7 @@ Java_com_example_blockgame_GLESNativeLib_draw(JNIEnv* env, jobject obj, float de
     frameworkInst->handleEvent();
     frameworkInst->update(deltaTime);
     frameworkInst->render();
-    PRINT_LOG(1/deltaTime, %f);
+    //PRINT_LOG(1/deltaTime, %f);
     Framework::deltaTime = deltaTime;
     Framework::accTime += deltaTime;
 }

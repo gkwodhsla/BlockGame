@@ -60,7 +60,6 @@ public class GLESView extends GLSurfaceView
     {
         public void onDrawFrame(GL10 gl)
         {
-            GLESNativeLib.draw(deltaTime);
             long afterTime = SystemClock.elapsedRealtime();
             deltaTime = (float)(afterTime - beginTime) / 1000.0f;
             if(deltaTime < maxFPS)
@@ -72,6 +71,7 @@ public class GLESView extends GLSurfaceView
 
             }
             beginTime += deltaTime * 1000.0f;
+            GLESNativeLib.draw(deltaTime);
         }
 
         public void onSurfaceChanged(GL10 gl, int width, int height) { GLESNativeLib.resize(width, height); }

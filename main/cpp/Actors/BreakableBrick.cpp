@@ -3,6 +3,7 @@
 #include "../Components/ImageComponent.h"
 #include "../Components/BoxCollisionComponent.h"
 #include "../Components/ParticleComponent.h"
+#include "../Levels/MainLevel.h"
 #include "StageManager.h"
 
 PNG* BreakableBrick::blueImage = nullptr;
@@ -46,6 +47,7 @@ BreakableBrick::BreakableBrick()
                                                      this->setVisibility(false);
                                                      isPlay = true;
                                                      particle->play();
+                                                     isHited = true;
                                                  }
                                              });
     particle = createComponent<ParticleComponent>(this, particleNum);
@@ -89,6 +91,16 @@ void BreakableBrick::render()
 void BreakableBrick::update(const float deltaTime)
 {
     HActor::update(deltaTime);
+    if(isHited && particle->getIsEnd())
+    {
+        auto mainLv = GlobalFunction::Cast<MainLevel>(GlobalFunction::getLevel());
+        if(mainLv)
+        {
+            mainLv->stageManager->decRestBrick();
+            mainLv->stageManager->returnToPool(this);
+            isHited = false;
+        }
+    }
 }
 
 void BreakableBrick::setBlockToUse(const BlockColor& color)
@@ -116,4 +128,6 @@ void BreakableBrick::setBlockToUse(const BlockColor& color)
             particle->changeParticleImg(purpleImage);
             break;
     }
+    isHited = false;
+    isPlay = false;
 }

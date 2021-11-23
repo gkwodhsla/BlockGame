@@ -24,6 +24,9 @@ public:
     void setParticleNum(size_t num);
     void setLifeTime(const float time);
     void setRepeat(bool isParticleRepeat);
+    bool getIsEnd()const{return isEnd;}
+
+public:
     void changeParticleImg(const char* filePath, const bool isCreateMipmap, const GLbitfield magFilter,
                            const GLbitfield minFilter, const GLbitfield wrappingModeS, const GLbitfield wrappingModeT);
     void changeParticleImg(PNG* png);
@@ -50,6 +53,7 @@ private:
     PNG* particleImg = nullptr;
     bool isRepeat = false;
     bool isPlay = false;
+    bool isEnd = true;
     float accTime = 0.0f;
     static const float rect[];
 };

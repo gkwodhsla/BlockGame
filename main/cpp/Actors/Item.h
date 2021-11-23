@@ -33,4 +33,5 @@ private:
     MovementComponent* moveComp = nullptr;
     static const float gravAcc;
     static constexpr float initSpeed = 100.0f;
+    static constexpr float deadLine = -500.0f;
 };

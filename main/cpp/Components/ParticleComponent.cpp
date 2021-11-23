@@ -227,12 +227,14 @@ void ParticleComponent::changeParticleImg(PNG* png)
 void ParticleComponent::play()
 {
     isPlay = true;
+    isEnd = false;
     accTime = 0.0f;
 }
 
 void ParticleComponent::stop()
 {
     isPlay = false;
+    isEnd = true;
 }
 
 void ParticleComponent::setNewParticleData()

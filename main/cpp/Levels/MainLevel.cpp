@@ -26,17 +26,38 @@ void MainLevel::enterGameWorld()
 {
     createBaseObject();
 
-    //auto board = spawnActor<ScoreBoard>();
-    //board->setActorWorldLocation(-100.0f, 0.0f);
-    //board->setActorWorldScale(0.5f,0.5f);
+    board = spawnActor<ScoreBoard>();
+    board->setActorWorldLocation(-100.0f, 0.0f);
+    board->setActorWorldScale(1.0f,1.0f);
+    board->setVisibility(false);
 
-    auto stage = spawnActor<StageManager>();
-    stage->setGameMap();
+    stageManager = spawnActor<StageManager>();
+
+    clearGameWorld();
 }
 
 void MainLevel::exitGameWorld()
 {
 
+}
+
+void MainLevel::update(const float deltaTime)
+{
+    HLevelBase::update(deltaTime);
+    if(isMsgTime)
+    {
+        if(stageStartCoolTime <= 0.0f)
+        {
+            isMsgTime = false;
+            stageManager->setGameMap();
+            Ball* ball = GlobalFunction::Cast<Ball>(spawnActor<Ball>());
+            ball->setActorWorldScale(16.0f,16.0f);
+            ball->setActorWorldLocation(0.0f,-200.0f);
+            ball->setCollisionComp(10.0f);
+            board->setVisibility(false);
+        }
+        stageStartCoolTime -= deltaTime;
+    }
 }
 
 void MainLevel::createBaseObject()
@@ -57,13 +78,26 @@ void MainLevel::createBaseObject()
     Bouncer* bouncer = GlobalFunction::Cast<Bouncer>(spawnActor<Bouncer>());
     bouncer->setActorWorldScale(200.0f,30.0f);
     bouncer->setActorWorldLocation(0.0f, -300.0f);
-    Ball* ball = GlobalFunction::Cast<Ball>(spawnActor<Ball>());
-    ball->setActorWorldScale(16.0f,16.0f);
-    ball->setActorWorldLocation(0.0f,-200.0f);
-    ball->setCollisionComp(10.0f);
+
 
     this->curController = GlobalFunction::createNewObject<HPlayerController>(bouncer);
     Camera* camera = GlobalFunction::Cast<Camera>(spawnActor<Camera>(frameworkInst->rendererSize));
     camera->activateCamera();
+}
 
+void MainLevel::clearGameWorld()
+{
+    isMsgTime = true;
+    for(auto&actor : actors)
+    {
+        if(GlobalFunction::Cast<Ball>(actor) ||
+           GlobalFunction::Cast<Item>(actor))
+        {
+            actor->destroyAction();
+        }
+    }//이전 스테이지의 아이템, 공들을 모두 제거한다.
+    stageStartCoolTime = maxStageStartCoolTime;
+    std::string temp = "Stage " + std::to_string(stageManager->getCurStage());
+    board->changeContent(temp);
+    board->setVisibility(true);
 }

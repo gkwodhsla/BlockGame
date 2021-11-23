@@ -22,3 +22,8 @@ void ScoreBoard::update(const float deltaTime)
 {
     HActor::update(deltaTime);
 }
+
+void ScoreBoard::changeContent(const std::string& content)
+{
+    scoreText->changeContent(content);
+}

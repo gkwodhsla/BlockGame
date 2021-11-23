@@ -15,6 +15,8 @@ public:
     virtual void render() override;
     virtual void update(const float deltaTime) override;
 
+public:
+    void changeContent(const std::string& content);
 private:
     TTFComponent* scoreText = nullptr;
 };

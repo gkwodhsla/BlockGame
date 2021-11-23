@@ -73,7 +73,7 @@ protected:
     }
     //이 함수를 통해 컴포넌트를 생성한다.
 
-protected:
+public:
     std::function<void()> destroyAction;
 
 private:

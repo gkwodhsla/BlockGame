@@ -1,5 +1,7 @@
 #include "HLevelBase.h"
 
+class StageManager;
+class ScoreBoard;
 class MainLevel: public HLevelBase
 {
 public:
@@ -9,12 +11,26 @@ public:
     virtual ~MainLevel();
 
 public:
+    void update(const float deltaTime) override;
+
+public:
     void exitGameWorld() override;
     void enterGameWorld() override;
 
+public:
+    void clearGameWorld();
+
+public:
+    StageManager* stageManager = nullptr;
+    ScoreBoard* board = nullptr;
 
 private:
     void createBaseObject();
+
+private:
+    bool isMsgTime = false;
+    const float maxStageStartCoolTime = 2.0f;
+    float stageStartCoolTime = 2.0f;
 
 private:
     static constexpr float boardYSize = 400.0f;

@@ -7,7 +7,8 @@
 #include "../Actors/Item.h"
 #include "../Actors/BreakableBrick.h"
 
-const float Ball::ballSpeed = 200.0f;
+const float Ball::ballSpeed = 300.0f;
+const float Ball::deadLine = -500.0f;
 
 Ball::Ball()
 {
@@ -21,7 +22,7 @@ Ball::Ball()
     {
         auto level = GlobalFunction::Cast<MainLevel>(GlobalFunction::getLevel());
         auto block = GlobalFunction::Cast<BreakableBrick>(other);
-        if(level && block && GlobalFunction::generateRandomBool(0.5f))
+        if(level && block && GlobalFunction::generateRandomBool(0.2f)) //20%확률로 아이템을 생성한다.
         {
             int which = GlobalFunction::generateRandomInt(0, 2);
             auto newItem = level->spawnActor<Item>((whichItem)which);
@@ -63,6 +64,10 @@ void Ball::update(const float deltaTime)
 {
     HActor::update(deltaTime);
     ballMovement->update(deltaTime);
+    if(getActorWorldLocation().second <= deadLine)
+    {
+        destroyAction();
+    }
     /*auto dirVec = getActorDirectionalVector() * -1.0f;
 
     ballParticle->setVelRange(std::make_pair(dirVec.x * 5.0f, dirVec.x * 30.0f),

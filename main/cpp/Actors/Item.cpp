@@ -6,8 +6,6 @@
 #include "Bouncer.h"
 #include "Ball.h"
 
-const float Item::gravAcc = -9.8f;
-
 Item::Item(const whichItem& whatItem)
 {
     setActorDirectionalVector(glm::vec2(0.0f, -1.0f));
@@ -74,4 +72,8 @@ void Item::update(const float deltaTime)
 {
     HActor::update(deltaTime);
     moveComp->update(deltaTime);
+    if(getActorWorldLocation().second < deadLine)
+    {
+        destroyAction();
+    }
 }

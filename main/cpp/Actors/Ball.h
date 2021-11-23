@@ -26,4 +26,5 @@ private:
     CircleCollisionComponent* collisionComp = nullptr;
     MovementComponent* ballMovement = nullptr;
     static const float ballSpeed;
+    static const float deadLine;
 };

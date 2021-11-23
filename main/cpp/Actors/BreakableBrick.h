@@ -25,6 +25,7 @@ public:
 private:
     ParticleComponent* particle;
     bool isPlay = false;
+    bool isHited = false;
 
 private:
     static float xPosMin;

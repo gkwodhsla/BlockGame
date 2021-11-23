@@ -28,6 +28,7 @@ public:
 public:
     void changeFont(const char* filePath, size_t fontSize);
     void setTextColor(const float r, const float g, const float b);
+    void changeContent(const std::string& content){this->content=content;}
 
 private:
     void createFontTexture(const char* filePath, size_t fontSize);

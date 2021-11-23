@@ -1,6 +1,7 @@
 #include "StageManager.h"
 #include "BreakableBrick.h"
 #include "../Common/Common.h"
+#include "../Levels/MainLevel.h"
 #include <string>
 #include <iterator>
 #include <sstream>
@@ -16,7 +17,7 @@ StageManager::StageManager(): brickPool(mapSize*mapSize)
     {
         mapData[i].reserve(mapSize * mapSize);
         size_t fileSize;
-        std::string fileName = "misc/stage" + std::to_string(i + 1 + 2) + ".txt";
+        std::string fileName = "misc/stage" + std::to_string(i + 1) + ".txt";
         char *buffer = GlobalFunction::readFile(fileName.c_str(), fileSize);
         std::istringstream ss{buffer};
         std::string temp{std::istream_iterator<char>(ss), {}};
@@ -46,50 +47,54 @@ void StageManager::setGameMap()
     {
         for(int j = 0; j < mapSize; ++j)
         {
-            if(mapData[0][i*mapSize + j] == '0')
+            if(mapData[curStage][i*mapSize + j] == '0')
             {
 
             }
-            else if(mapData[0][i*mapSize + j] == '1')
+            else
             {
-                auto* brick = brickPool.acquireObject();
-                brick->setBlockToUse(BlockColor::BLUE);
-                brick->setActorWorldScale(blockXSize, blockYSize);
-                brick->setActorWorldLocation(-rendererHalfSize + j*blockXSize + blockXSize/2.0f,
-                                             blockBeginYPos - i*blockYSize - blockYSize/2.0f);
-            }
-            else if(mapData[0][i*mapSize + j] == '2')
-            {
-                auto* brick = brickPool.acquireObject();
-                brick->setBlockToUse(BlockColor::RED);
-                brick->setActorWorldScale(blockXSize, blockYSize);
-                brick->setActorWorldLocation(-rendererHalfSize + j*blockXSize + blockXSize/2.0f,
-                                             blockBeginYPos - i*blockYSize - blockYSize/2.0f);
-            }
-            else if(mapData[0][i*mapSize + j] == '3')
-            {
-                auto* brick = brickPool.acquireObject();
-                brick->setBlockToUse(BlockColor::GREEN);
-                brick->setActorWorldScale(blockXSize, blockYSize);
-                brick->setActorWorldLocation(-rendererHalfSize + j*blockXSize + blockXSize/2.0f,
-                                             blockBeginYPos - i*blockYSize - blockYSize/2.0f);
-            }
-            else if(mapData[0][i*mapSize + j] == '4')
-            {
-                auto* brick = brickPool.acquireObject();
-                brick->setBlockToUse(BlockColor::ORANGE);
-                brick->setActorWorldScale(blockXSize, blockYSize);
-                brick->setActorWorldLocation(-rendererHalfSize + j*blockXSize + blockXSize/2.0f,
-                                             blockBeginYPos - i*blockYSize - blockYSize/2.0f);
+                ++restBricks;
+                if(mapData[curStage][i*mapSize + j] == '1')
+                {
+                    auto* brick = brickPool.acquireObject();
+                    brick->setBlockToUse(BlockColor::BLUE);
+                    brick->setActorWorldScale(blockXSize, blockYSize);
+                    brick->setActorWorldLocation(-rendererHalfSize + j*blockXSize + blockXSize/2.0f,
+                                                 blockBeginYPos - i*blockYSize - blockYSize/2.0f);
+                }
+                else if(mapData[curStage][i*mapSize + j] == '2')
+                {
+                    auto* brick = brickPool.acquireObject();
+                    brick->setBlockToUse(BlockColor::RED);
+                    brick->setActorWorldScale(blockXSize, blockYSize);
+                    brick->setActorWorldLocation(-rendererHalfSize + j*blockXSize + blockXSize/2.0f,
+                                                 blockBeginYPos - i*blockYSize - blockYSize/2.0f);
+                }
+                else if(mapData[curStage][i*mapSize + j] == '3')
+                {
+                    auto* brick = brickPool.acquireObject();
+                    brick->setBlockToUse(BlockColor::GREEN);
+                    brick->setActorWorldScale(blockXSize, blockYSize);
+                    brick->setActorWorldLocation(-rendererHalfSize + j*blockXSize + blockXSize/2.0f,
+                                                 blockBeginYPos - i*blockYSize - blockYSize/2.0f);
+                }
+                else if(mapData[curStage][i*mapSize + j] == '4')
+                {
+                    auto* brick = brickPool.acquireObject();
+                    brick->setBlockToUse(BlockColor::ORANGE);
+                    brick->setActorWorldScale(blockXSize, blockYSize);
+                    brick->setActorWorldLocation(-rendererHalfSize + j*blockXSize + blockXSize/2.0f,
+                                                 blockBeginYPos - i*blockYSize - blockYSize/2.0f);
 
-            }
-            else if(mapData[0][i*mapSize + j] == '5')
-            {
-                auto* brick = brickPool.acquireObject();
-                brick->setBlockToUse(BlockColor::PURPLE);
-                brick->setActorWorldScale(blockXSize, blockYSize);
-                brick->setActorWorldLocation(-rendererHalfSize + j*blockXSize + blockXSize/2.0f,
-                                             blockBeginYPos - i*blockYSize - blockYSize/2.0f);
+                }
+                else if(mapData[curStage][i*mapSize + j] == '5')
+                {
+                    auto* brick = brickPool.acquireObject();
+                    brick->setBlockToUse(BlockColor::PURPLE);
+                    brick->setActorWorldScale(blockXSize, blockYSize);
+                    brick->setActorWorldLocation(-rendererHalfSize + j*blockXSize + blockXSize/2.0f,
+                                                 blockBeginYPos - i*blockYSize - blockYSize/2.0f);
+                }
             }
         }
     }
@@ -99,3 +104,13 @@ void StageManager::returnToPool(BreakableBrick* brick)
 {
     brickPool.returnToPool(brick);
 }
+
+void StageManager::decRestBrick()
+{
+    --restBricks;
+    if(restBricks == 0)
+    {
+        ++curStage;
+        GlobalFunction::Cast<MainLevel>(GlobalFunction::getLevel())->clearGameWorld();
+    }
+};

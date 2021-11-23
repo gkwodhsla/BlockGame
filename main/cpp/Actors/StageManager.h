@@ -18,14 +18,18 @@ public:
     virtual void update(const float deltaTime) override;
     void setGameMap();
     void returnToPool(BreakableBrick* brick);
+    void decRestBrick();
+    int getCurStage(){return curStage+1;}
 
 private:
-    static constexpr int maxStage = 1;
+    static constexpr int maxStage = 5;
     static constexpr int mapSize = 15;
     static constexpr float boardYSize = 400.0f;
     static const float blockBeginYPos;
     static const float blockXSize;
     static const float blockYSize;
+    size_t restBricks = 0;
+    size_t curStage = 0;
     ActorObjectPool<BreakableBrick> brickPool;
     std::vector<std::vector<char>> mapData;
 };
