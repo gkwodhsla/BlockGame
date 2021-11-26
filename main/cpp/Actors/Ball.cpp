@@ -71,12 +71,7 @@ void Ball::update(const float deltaTime)
     }
     if(isDirVecChangedRecently)
     {
-        dirCoolTime -= deltaTime;
-        if(dirCoolTime <= 0.0f)
-        {
-            dirCoolTime = maxDirCoolTime;
-            isDirVecChangedRecently = false;
-        }
+        isDirVecChangedRecently = false;
     }
     /*auto dirVec = getActorDirectionalVector() * -1.0f;
 
@@ -84,6 +79,11 @@ void Ball::update(const float deltaTime)
                               std::make_pair(dirVec.y * 5.0f, dirVec.y * 30.0f));
     ballParticle->setAccRange(std::make_pair(dirVec.x, dirVec.x), std::make_pair(dirVec.y, dirVec.y));
 */
+}
+
+float Ball::getCollisionRad() const
+{
+    return collisionComp->getRadius();
 }
 
 void Ball::setCollisionComp(float rad)

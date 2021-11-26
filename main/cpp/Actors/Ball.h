@@ -17,6 +17,7 @@ public:
     virtual void render() override;
     virtual void update(const float deltaTime) override;
     void setCollisionComp(float rad);
+    float getCollisionRad() const;
 
 public:
     void setIsDirVecChangedRecently(bool isChanged){isDirVecChangedRecently = isChanged;}

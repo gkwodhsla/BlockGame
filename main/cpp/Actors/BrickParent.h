@@ -17,6 +17,9 @@ public:
     BoxCollisionComponent* getCollisionComp();
     static void changeBallDirVec(HActor* me, HActor* other);
 
+private:
+    static int whichArea(float x, float y);
+
 protected:
     BoxCollisionComponent* collisionComp = nullptr;
     ImageComponent* brickImage = nullptr;

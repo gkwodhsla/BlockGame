@@ -54,7 +54,7 @@ void MainLevel::update(const float deltaTime)
             addBallCnt();
             ball->setActorWorldScale(16.0f,16.0f);
             ball->setActorWorldLocation(0.0f,-200.0f);
-            ball->setCollisionComp(10.0f);
+            ball->setCollisionComp(12.0f);
             board->setVisibility(false);
         }
         stageStartCoolTime -= deltaTime;
