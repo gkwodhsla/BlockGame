@@ -25,7 +25,7 @@ void BrickParent::changeBallDirVec(HActor* me, HActor* other)
 {
     {
         auto ball = GlobalFunction::Cast<Ball>(other);
-        if(ball)
+        if(ball && !ball->getIsDirVecChangedRecently())
         {
             bool isHitFlat = true;
             auto brickPos = me->getActorWorldLocation();
@@ -52,52 +52,49 @@ void BrickParent::changeBallDirVec(HActor* me, HActor* other)
             {
                 normalVec = glm::vec2(1.0f, 0.0f);
             }
-            else if(brickX2 < ballPos.first && brickY2 > ballPos.second)
+            
+            else if(brickX2 < ballPos.first && brickY2 > ballPos.second) //벽돌 오른쪽 아래 모서리
             {
-                isHitFlat = false;
-                auto rotateMat =
-                        glm::rotate(glm::mat4(1.0f), glm::radians(135.0f /*+ (float)BrickParent:*/),
-                                    glm::vec3(0.0f,0.0f,1.0f));
-                auto ballNewDir=glm::vec4(0.0f,1.0f,0.0f,1.0f)*rotateMat;
-                ball->setActorDirectionalVector(glm::vec2(ballNewDir.x, ballNewDir.y));
+                glm::vec2 bas{ballPos.first, ballPos.second};
+                glm::vec2 brs{brickX2, brickY2};
+                auto vecBallToBrick = glm::normalize(bas - brs);
+                normalVec = vecBallToBrick;
+                PRINT_LOG("right down", %s);
             }
-            else if((brickX2 < ballPos.first && brickY1 < ballPos.second))
+            else if((brickX2 < ballPos.first && brickY1 < ballPos.second)) //벽돌 오른쪽 위 모서리
             {
-                isHitFlat = false;
-                auto rotateMat =
-                        glm::rotate(glm::mat4(1.0f), glm::radians(45.0f + GlobalFunction::generateRandomFloat(1.0f, 5.0f)),
-                                    glm::vec3(0.0f,0.0f,1.0f));
-                auto ballNewDir=glm::vec4(0.0f,1.0f,0.0f,1.0f)*rotateMat;
-                ball->setActorDirectionalVector(glm::vec2(ballNewDir.x, ballNewDir.y));
+                glm::vec2 bas{ballPos.first, ballPos.second};
+                glm::vec2 brs{brickX2, brickY1};
+                auto vecBallToBrick = glm::normalize(bas - brs);
+                normalVec = vecBallToBrick;
+                PRINT_LOG("right up", %s);
             }
-            else if(brickX1 > ballPos.first && brickY2 > ballPos.second)
+            else if(brickX1 > ballPos.first && brickY2 > ballPos.second) //벽돌 왼쪽 아래 모서리
             {
-                isHitFlat = false;
-                auto rotateMat =
-                        glm::rotate(glm::mat4(1.0f), glm::radians(-135.0f + GlobalFunction::generateRandomFloat(1.0f, 5.0f)),
-                                    glm::vec3(0.0f,0.0f,1.0f));
-                auto ballNewDir=glm::vec4(0.0f,1.0f,0.0f,1.0f)*rotateMat;
-                ball->setActorDirectionalVector(glm::vec2(ballNewDir.x, ballNewDir.y));
+                glm::vec2 bas{ballPos.first, ballPos.second};
+                glm::vec2 brs{brickX1, brickY2};
+                auto vecBallToBrick = glm::normalize(bas - brs);
+                normalVec = vecBallToBrick;
+                PRINT_LOG("left down", %s);
             }
-            else if(brickX1 > ballPos.first && brickY1 < ballPos.second)
+            else if(brickX1 > ballPos.first && brickY1 < ballPos.second) //벽돌 왼쪽 위 모서리
             {
-                isHitFlat = false;
-                auto rotateMat =
-                        glm::rotate(glm::mat4(1.0f), glm::radians(-45.0f + GlobalFunction::generateRandomFloat(1.0f, 5.0f)),
-                                    glm::vec3(0.0f,0.0f,1.0f));
-                auto ballNewDir=glm::vec4(0.0f,1.0f,0.0f,1.0f)*rotateMat;
-                ball->setActorDirectionalVector(glm::vec2(ballNewDir.x, ballNewDir.y));
+                glm::vec2 bas{ballPos.first, ballPos.second};
+                glm::vec2 brs{brickX1, brickY1};
+                auto vecBallToBrick = glm::normalize(bas - brs);
+                normalVec = vecBallToBrick;
+                PRINT_LOG("left up", %s);
+            }
 
-                //ball->setActorDirectionalVector(glm::normalize(
-                //      glm::vec2(ballPos.first - brickPos.first, ballPos.second -brickPos.second)));
-            }
             if(isHitFlat)
             {
                 auto ballDirVec = ball->getActorDirectionalVector();
-                ball->setActorDirectionalVector(glm::reflect(ballDirVec, normalVec));
+                auto ref = glm::reflect(ballDirVec, normalVec);
+                ball->setActorDirectionalVector(ref);
             }
-            auto ballDirVec = ball->getActorDirectionalVector();
-            ball->setActorWorldLocation(ballPos.first + ballDirVec.x * 5.0f, ballPos.second + ballDirVec.y * 5.0f);
+            ball->setIsDirVecChangedRecently(true);
+            //auto ballDirVec = ball->getActorDirectionalVector();
+            //ball->setActorWorldLocation(ballPos.first + ballDirVec.x * 5.0f, ballPos.second + ballDirVec.y * 5.0f);
 
 
 

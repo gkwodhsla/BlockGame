@@ -19,12 +19,10 @@ public:
 
 public:
     void clearGameWorld();
-    void addBallCnt(){PRINT_LOG("incBall", %s);
-        ++ballCnt;}
+    void addBallCnt(){++ballCnt;}
     void decBallCnt()
     {
         --ballCnt;
-        PRINT_LOG("decBall", %s);
         if(ballCnt == 0)
         {
             clearGameWorld();

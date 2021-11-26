@@ -69,6 +69,15 @@ void Ball::update(const float deltaTime)
         GlobalFunction::Cast<MainLevel>(GlobalFunction::getLevel())->decBallCnt();
         destroyAction();
     }
+    if(isDirVecChangedRecently)
+    {
+        dirCoolTime -= deltaTime;
+        if(dirCoolTime <= 0.0f)
+        {
+            dirCoolTime = maxDirCoolTime;
+            isDirVecChangedRecently = false;
+        }
+    }
     /*auto dirVec = getActorDirectionalVector() * -1.0f;
 
     ballParticle->setVelRange(std::make_pair(dirVec.x * 5.0f, dirVec.x * 30.0f),

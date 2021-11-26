@@ -106,4 +106,5 @@ void MainLevel::clearGameWorld()
     std::string temp = "Stage " + std::to_string(stageManager->getCurStage());
     board->changeContent(temp);
     board->setVisibility(true);
+    ballCnt = 0;
 }

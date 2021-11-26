@@ -19,6 +19,10 @@ public:
     void setCollisionComp(float rad);
 
 public:
+    void setIsDirVecChangedRecently(bool isChanged){isDirVecChangedRecently = isChanged;}
+    bool getIsDirVecChangedRecently()const {return isDirVecChangedRecently;}
+
+public:
     ParticleComponent* ballParticle = nullptr;
 
 private:
@@ -27,4 +31,7 @@ private:
     MovementComponent* ballMovement = nullptr;
     static const float ballSpeed;
     static const float deadLine;
+    bool isDirVecChangedRecently = false;
+    float dirCoolTime = 0.1f;
+    static constexpr float maxDirCoolTime = 0.1f;
 };
