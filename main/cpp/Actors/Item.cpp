@@ -25,9 +25,9 @@ Item::Item(const whichItem& whatItem)
                 {
                     auto ball = GlobalFunction::getLevel()->spawnActor<Ball>();
                     GlobalFunction::Cast<MainLevel>(GlobalFunction::getLevel())->addBallCnt();
-                    ball->setActorWorldScale(16.0f,16.0f);
+                    ball->setActorWorldScale(15.0f,15.0f);
                     ball->setActorWorldLocation(0.0f,-100.0f);
-                    ball->setCollisionComp(10.0f);
+                    ball->setCollisionComp(8.0f);
                     this->destroyAction();
                 }
             });

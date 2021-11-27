@@ -52,9 +52,9 @@ void MainLevel::update(const float deltaTime)
             stageManager->setGameMap();
             Ball* ball = GlobalFunction::Cast<Ball>(spawnActor<Ball>());
             addBallCnt();
-            ball->setActorWorldScale(16.0f,16.0f);
+            ball->setActorWorldScale(15.0f,15.0f);
             ball->setActorWorldLocation(0.0f,-200.0f);
-            ball->setCollisionComp(12.0f);
+            ball->setCollisionComp(8.0f);
             board->setVisibility(false);
         }
         stageStartCoolTime -= deltaTime;
