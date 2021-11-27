@@ -53,6 +53,10 @@ public:
     bool getIsSetLifeTime() const;
     void setPendingKill(const bool newPendingKill);
     bool getPendingKill() const;
+    void setEnableSubstepping(bool isEnable){isEnableSubstepping = isEnable;}
+    bool getEnableSubstepping()const{return isEnableSubstepping;}
+    void setSubsteppingNum(size_t num){subSteppingNum = num;}
+    size_t getSubsteppingNum(){return subSteppingNum;}
     void bindVAO(){glBindVertexArray(VAO);}
 
 protected:
@@ -63,6 +67,8 @@ protected:
     bool tickable = true;
     bool isSetLifeTime = false;
     bool isPendingKill = false;
+    bool isEnableSubstepping = false;
+    size_t subSteppingNum = 0;
 
     template<typename T, typename ...Types>
     T* createComponent(Types ...args)

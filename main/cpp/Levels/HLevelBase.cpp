@@ -54,9 +54,41 @@ void HLevelBase::update(const float deltaTime)
         destroyActors();
         curDeleteTime = maxDeleteTime;
     }
+
+    for(auto&actor : actors)
+    {
+        if(actor && !actor->getEnableSubstepping())
+        {
+            actor->update(deltaTime);
+        }
+        else if(actor && actor->getEnableSubstepping())
+        {
+            float subStepTime = deltaTime / (float)actor->getSubsteppingNum();
+            for(int i=0;i<actor->getSubsteppingNum();++i) //physics simulation 의 정확성을 위한 substepping이 켜져있다면 한 프레임 내에서
+                //정해진 substep의 횟수만큼 물리 계산을 한다.
+            {
+                actor->update(subStepTime);
+                for(int j = 0; j < (int)collisionObjects.size(); ++j)
+                {
+                    if(collisionObjects[j]->getOwner() == actor)
+                    {
+                        for(int k = 0; k < (int)collisionObjects.size(); ++ k)
+                        {
+                            if(j != k && collisionObjects[j]->getOwner()->getVisibility())
+                            {
+                                collisionObjects[i]->checkCollision(*collisionObjects[j]);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     for(int i = 0; i < (int)collisionObjects.size() - 1; ++i)
     {
-        if(collisionObjects[i]->getOwner()->getVisibility())
+        if(collisionObjects[i]->getOwner()->getVisibility() && !collisionObjects[i]->getOwner()->getEnableSubstepping())
         {
             for(int j = i + 1; j < (int)collisionObjects.size(); ++j)
             {
@@ -65,13 +97,6 @@ void HLevelBase::update(const float deltaTime)
                     collisionObjects[i]->checkCollision(*collisionObjects[j]);
                 }
             }
-        }
-    }
-    for(auto&actor : actors)
-    {
-        if(actor)
-        {
-            actor->update(deltaTime);
         }
     }
 }
