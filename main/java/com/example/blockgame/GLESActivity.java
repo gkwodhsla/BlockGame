@@ -16,17 +16,20 @@ public class GLESActivity extends Activity
         super.onCreate(bundle);
         view = new GLESView(getApplication());
         setContentView(view);
+        view.setPreserveEGLContextOnPause(true);
     }
 
     @Override protected void onPause()
     {
         super.onPause();
         view.onPause();
+        GLESNativeLib.pause();
     }
 
     @Override protected void onResume()
     {
         super.onResume();
         view.onResume();
+        GLESNativeLib.resume();
     }
 }

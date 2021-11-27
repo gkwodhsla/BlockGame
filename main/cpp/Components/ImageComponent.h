@@ -8,7 +8,7 @@ public:
     PNG(const PNG&) = delete;
     PNG& operator=(const PNG&) = delete;
     PNG(const char* filePath, const bool isCreateMipmap = true,
-                   const GLbitfield magFilter = GL_LINEAR, const GLbitfield minFilter = GL_LINEAR_MIPMAP_LINEAR,
+                   const GLbitfield magFilter = GL_LINEAR, const GLbitfield minFilter = GL_NEAREST_MIPMAP_NEAREST,
                    const GLbitfield wrappingModeS = GL_REPEAT, const GLbitfield wrappingModeT = GL_REPEAT);
     virtual ~PNG();
 

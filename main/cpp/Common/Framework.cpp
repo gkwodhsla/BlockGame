@@ -27,6 +27,8 @@ GLuint Framework::screenWidth = 0;
 GLuint Framework::screenHeight = 0;
 float Framework::accTime = 0.0f;
 float Framework::deltaTime= 0.0f;
+bool Framework::isGamePlaying = true;
+
 Framework* frameworkInst = nullptr;
 
 
@@ -119,12 +121,15 @@ JNIEXPORT void JNICALL Java_com_example_blockgame_GLESNativeLib_readAssetsNative
 JNIEXPORT void JNICALL Java_com_example_blockgame_GLESNativeLib_touchEventStart(JNIEnv *env, jobject obj, float x, float y);
 JNIEXPORT void JNICALL Java_com_example_blockgame_GLESNativeLib_touchEventMove(JNIEnv *env, jobject obj, float x, float y);
 JNIEXPORT void JNICALL Java_com_example_blockgame_GLESNativeLib_touchEventRelease(JNIEnv *env, jobject obj, float x, float y);
+JNIEXPORT void JNICALL Java_com_example_blockgame_GLESNativeLib_pause(JNIEnv *env, jobject obj);
+JNIEXPORT void JNICALL Java_com_example_blockgame_GLESNativeLib_resume(JNIEnv *env, jobject obj);
 };
 
 JNIEXPORT void JNICALL
 Java_com_example_blockgame_GLESNativeLib_init(JNIEnv* env, jobject obj)
 {
     frameworkInst->init("shader/textureVertex.vs", "shader/textureFrag.fs"); //프레임워크 초기화
+    PRINT_LOG("init game!", %s)
 }
 
 JNIEXPORT void JNICALL
@@ -137,12 +142,19 @@ Java_com_example_blockgame_GLESNativeLib_resize(JNIEnv* env, jobject obj, jint w
 JNIEXPORT void JNICALL
 Java_com_example_blockgame_GLESNativeLib_draw(JNIEnv* env, jobject obj, float deltaTime)
 {
-    frameworkInst->handleEvent();
-    frameworkInst->update(deltaTime);
-    frameworkInst->render();
-    //PRINT_LOG(1/deltaTime, %f);
-    Framework::deltaTime = deltaTime;
-    Framework::accTime += deltaTime;
+    if(frameworkInst->isGamePlaying)
+    {
+        if(deltaTime > 0.1f)
+        {
+            deltaTime = Framework::deltaTime;
+        }
+        frameworkInst->handleEvent();
+        frameworkInst->update(deltaTime);
+        frameworkInst->render();
+        Framework::deltaTime = deltaTime;
+        Framework::accTime += deltaTime;
+        PRINT_LOG(deltaTime, %f)
+    }
 }
 
 JNIEXPORT void JNICALL
@@ -174,4 +186,17 @@ Java_com_example_blockgame_GLESNativeLib_touchEventRelease(JNIEnv *env, jobject 
     Framework::conversionCoordToGLCoordSystem(x, y);
     Event newEvent(EVENT_TYPE::FINGER_UP, x, y);
     frameworkInst->eventQ->pushEvent(newEvent);
+}
+
+JNIEXPORT void JNICALL
+Java_com_example_blockgame_GLESNativeLib_pause(JNIEnv *env, jobject obj)
+{
+    frameworkInst->isGamePlaying = false;
+    PRINT_LOG("Pause", %s)
+}
+JNIEXPORT void JNICALL
+Java_com_example_blockgame_GLESNativeLib_resume(JNIEnv *env, jobject obj)
+{
+    frameworkInst->isGamePlaying = true;
+    PRINT_LOG("resume", %s)
 }

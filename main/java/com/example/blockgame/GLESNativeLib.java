@@ -15,4 +15,6 @@ public class GLESNativeLib
     public static native void touchEventStart(float x, float y);
     public static native void touchEventMove(float x, float y);
     public static native void touchEventRelease(float x, float y);
+    public static native void pause();
+    public static native void resume();
 }

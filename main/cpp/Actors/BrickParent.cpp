@@ -40,22 +40,22 @@ void BrickParent::changeBallDirVec(HActor* me, HActor* other)
         if(brickX1<ballPos.first && ballPos.first < brickX2 && brickY2>ballPos.second) //벽돌 아래쪽
         {
             normalVec = glm::vec2(0.0f, -1.0f);
-            PRINT_LOG("down", %s);
+            //PRINT_LOG("down", %s);
         }
         else if(brickX1<ballPos.first && ballPos.first < brickX2 && brickY1<ballPos.second)// 벽돌 위쪽
         {
             normalVec = glm::vec2(0.0f, 1.0f);
-            PRINT_LOG("up", %s);
+            //PRINT_LOG("up", %s);
         }
         else if(brickY1>ballPos.second && ballPos.second>brickY2 && brickX2<ballPos.first)// 벽돌 오른쪽
         {
             normalVec = glm::vec2(1.0f, 0.0f);
-            PRINT_LOG("right", %s);
+            //PRINT_LOG("right", %s);
         }
         else if(brickY1>ballPos.second && ballPos.second>brickY2 && ballPos.first<brickX1)// 벽돌 왼쪽
         {
             normalVec = glm::vec2(-1.0f, 0.0f);
-            PRINT_LOG("left", %s);
+            //PRINT_LOG("left", %s);
         }
         else if(brickX2 < ballPos.first && brickY2 > ballPos.second) //오른쪽 아래 모서리
         {
@@ -77,7 +77,7 @@ void BrickParent::changeBallDirVec(HActor* me, HActor* other)
                 normalVec = glm::vec4(0.0f,1.0f, 0.0f, 1.0f)*rotateMat;
             }
 
-            PRINT_LOG("right down", %s)
+            //PRINT_LOG("right down", %s)
         }
         else if((brickX2 < ballPos.first && brickY1 < ballPos.second))//오른쪽 위 모서리
         {
@@ -98,7 +98,7 @@ void BrickParent::changeBallDirVec(HActor* me, HActor* other)
                                     glm::vec3(0.0f,0.0f,1.0f));
                 normalVec = glm::vec4(0.0f,1.0f, 0.0f, 1.0f)*rotateMat;
             }
-            PRINT_LOG("right up", %s)
+            //PRINT_LOG("right up", %s)
         }
         else if(brickX1 > ballPos.first && brickY2 > ballPos.second)//왼쪽 아래 모서리
         {
@@ -120,7 +120,7 @@ void BrickParent::changeBallDirVec(HActor* me, HActor* other)
                 normalVec = glm::vec4(0.0f,1.0f, 0.0f, 1.0f)*rotateMat;
             }
 
-            PRINT_LOG("left down", %s)
+            //PRINT_LOG("left down", %s)
         }
         else if(brickX1 > ballPos.first && brickY1 < ballPos.second)//왼쪽 위 모서리
         {
@@ -142,7 +142,7 @@ void BrickParent::changeBallDirVec(HActor* me, HActor* other)
                 normalVec = glm::vec4(0.0f,1.0f, 0.0f, 1.0f)*rotateMat;
             }
 
-            PRINT_LOG("left up", %s)
+            //PRINT_LOG("left up", %s)
 
         }
 

@@ -48,6 +48,7 @@ public:
     static constexpr float rendererSize = 800.0f;
     static float accTime;
     static float deltaTime;
+    static bool isGamePlaying;
 
 private:
     static Framework* instance;

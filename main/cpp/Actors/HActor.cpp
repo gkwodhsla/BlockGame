@@ -12,7 +12,6 @@ HActor::HActor()
     rootComponent = new HSceneComponent();
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
-    //VAO가 바인딩 됐기 때문에 해당 액터의 컴포넌트에 VBO가 있다면 들러붙는다.
 
     destroyAction = [this]()
     {

@@ -28,6 +28,8 @@ Item::Item(const whichItem& whatItem)
                     ball->setActorWorldScale(15.0f,15.0f);
                     ball->setActorWorldLocation(0.0f,-100.0f);
                     ball->setCollisionComp(8.0f);
+                    ball->setEnableSubstepping(true);
+                    ball->setSubsteppingNum(4);
                     this->destroyAction();
                 }
             });
