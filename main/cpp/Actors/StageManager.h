@@ -19,6 +19,7 @@ public:
     void setGameMap();
     void returnToPool(BreakableBrick* brick);
     void decRestBrick();
+    void setRestBrickToZero(){restBricks=0;}
     int getCurStage(){return curStage+1;}
 
 private:

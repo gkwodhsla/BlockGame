@@ -104,6 +104,7 @@ void MainLevel::clearGameWorld()
     }//이전 스테이지의 아이템, 공들을 모두 제거한다.
     stageStartCoolTime = maxStageStartCoolTime;
     std::string temp = "Stage " + std::to_string(stageManager->getCurStage());
+    stageManager->setRestBrickToZero();
     board->changeContent(temp);
     board->setVisibility(true);
     ballCnt = 0;
