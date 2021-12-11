@@ -6,9 +6,19 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/ext.hpp>
+
+GLuint HPrimitiveComponent::worldTransLoc = -1;
+GLuint HPrimitiveComponent::isFontDrawLoc = -1;
+GLuint HPrimitiveComponent::isParticleLoc = -1;
+
 HPrimitiveComponent::HPrimitiveComponent()
 {
-
+    if(worldTransLoc == -1)
+    {
+        worldTransLoc = glGetUniformLocation(Framework::curRenderer->getProgramID(), "worldTrans");
+        isFontDrawLoc = glGetUniformLocation(Framework::curRenderer->getProgramID(), "isDrawFont");
+        isParticleLoc = glGetUniformLocation(Framework::curRenderer->getProgramID(), "isInstanceDraw");
+    }
 }
 
 HPrimitiveComponent::~HPrimitiveComponent()
@@ -30,13 +40,11 @@ void HPrimitiveComponent::render()
     worldTransform *= glm::rotate(glm::mat4(1.0f), glm::radians(worldRotation), glm::vec3(0.0f,0.0f,1.0f));
     worldTransform *= glm::scale(glm::mat4(1.0f),
                                  glm::vec3(worldScale.first,worldScale.second,0.0f));
-    auto worldTransLoc = glGetUniformLocation(Framework::curRenderer->getProgramID(), "worldTrans");
+
     glUniformMatrix4fv(worldTransLoc, 1, GL_FALSE, glm::value_ptr(worldTransform));
 
-    auto isFontDrawLoc = glGetUniformLocation(Framework::curRenderer->getProgramID(), "isDrawFont");
     glUniform1i(isFontDrawLoc, false);
 
-    auto isParticleLoc = glGetUniformLocation(Framework::curRenderer->getProgramID(), "isInstanceDraw");
     glUniform1i(isParticleLoc, false);
 }
 

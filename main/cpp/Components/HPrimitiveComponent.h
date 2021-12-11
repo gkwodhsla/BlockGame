@@ -21,4 +21,7 @@ public:
 
 protected:
     bool visibility = true;
+    static GLuint worldTransLoc;
+    static GLuint isFontDrawLoc;
+    static GLuint isParticleLoc;
 };

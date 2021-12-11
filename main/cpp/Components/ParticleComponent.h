@@ -35,6 +35,17 @@ public:
 
 private:
     void setNewParticleData();
+    void setStaticData();
+
+protected:
+    static GLuint isInstanceDrawLoc;
+    static GLuint isRepeatLoc;
+    static GLuint gTimeLoc;
+    static GLuint uTexCoordLoc;
+    static GLuint velLoc;
+    static GLuint accLoc;
+    static GLuint addPosLoc;
+    static GLuint lifeTimeLoc;
 
 private:
     std::pair<float, float> xPosRange = {0.0f, 0.0f};

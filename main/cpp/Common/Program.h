@@ -10,7 +10,9 @@ public:
     Program& operator=(const Program&) = delete;
     Program(const char* VSPath, const char* FSPath);
 
+public:
     GLuint programID = -1;
+
 private:
     GLuint compileShader(GLenum shaderType, const char* sourceLoc);
     GLuint createProgram(GLuint VSID, GLuint FSID);

@@ -6,6 +6,11 @@
 #include <android/asset_manager_jni.h>
 #include <cstring>
 
+GLuint ImageComponent::positionLoc = -1;
+GLuint ImageComponent::texPosLoc = -1;
+GLuint ImageComponent::texCoordLoc = -1;
+GLuint ImageComponent::tintLoc = -1;
+
 const float ImageComponent::rect[] =
         {
                 -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
@@ -35,17 +40,37 @@ ImageComponent::ImageComponent(const char *filePath, HActor*owner, const bool is
     glUnmapBuffer(GL_ARRAY_BUFFER);
     ptr = nullptr;
 
-    auto attribLoc1 = glGetAttribLocation(Framework::curRenderer->getProgramID(), "position");
-    glEnableVertexAttribArray(attribLoc1);
-    glVertexAttribPointer(attribLoc1, 3, GL_FLOAT, GL_FALSE,sizeof(float)*5, (GLvoid*)0);
+    if(positionLoc == -1)
+    {
+        positionLoc = glGetAttribLocation(Framework::curRenderer->getProgramID(), "position");
+        texPosLoc = glGetAttribLocation(Framework::curRenderer->getProgramID(), "inputTexPos");
+        texCoordLoc = glGetUniformLocation(frameworkInst->curRenderer->getProgramID(), "uTexCoord");
+        tintLoc = glGetUniformLocation(frameworkInst->curRenderer->getProgramID(), "tintColor");
+    }
 
-    auto attribLoc2 = glGetAttribLocation(Framework::curRenderer->getProgramID(), "inputTexPos");
-    glEnableVertexAttribArray(attribLoc2);
-    glVertexAttribPointer(attribLoc2, 2, GL_FLOAT, GL_FALSE, sizeof(float)*5,(GLvoid*)(sizeof(float)*3));
+    glEnableVertexAttribArray(positionLoc);
+    glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE,sizeof(float)*5, (GLvoid*)0);
+
+    glEnableVertexAttribArray(texPosLoc);
+    glVertexAttribPointer(texPosLoc, 2, GL_FLOAT, GL_FALSE, sizeof(float)*5,(GLvoid*)(sizeof(float)*3));
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     setOwner(owner);
+}
+
+void ImageComponent::changeImage(const char *filePath, const bool isCreateMipmap, GLbitfield magFilter,
+                                 GLbitfield minFilter, const GLbitfield wrappingModeS, const GLbitfield wrappingModeT)
+{
+    png->changeImage(filePath, isCreateMipmap, magFilter, minFilter, wrappingModeS, wrappingModeT);
+
+    if(positionLoc == -1)
+    {
+        positionLoc = glGetAttribLocation(Framework::curRenderer->getProgramID(), "position");
+        texPosLoc = glGetAttribLocation(Framework::curRenderer->getProgramID(), "inputTexPos");
+        texCoordLoc = glGetUniformLocation(frameworkInst->curRenderer->getProgramID(), "uTexCoord");
+        tintLoc = glGetUniformLocation(frameworkInst->curRenderer->getProgramID(), "tintColor");
+    }
 }
 
 ImageComponent::~ImageComponent()
@@ -61,23 +86,15 @@ ImageComponent::~ImageComponent()
     }
 }
 
-void ImageComponent::changeImage(const char *filePath, const bool isCreateMipmap, GLbitfield magFilter,
-                                 GLbitfield minFilter, const GLbitfield wrappingModeS, const GLbitfield wrappingModeT)
-{
-    png->changeImage(filePath, isCreateMipmap, magFilter, minFilter, wrappingModeS, wrappingModeT);
-}
-
 void ImageComponent::render()
 {
     if(png)
     {
         HPrimitiveComponent::render();
-        auto uniformLoc = glGetUniformLocation(frameworkInst->curRenderer->getProgramID(), "uTexCoord");
-        glUniform1i(uniformLoc, 0); //여기 0은 GL_TEXTURE0을 의미한다. 텍스처슬롯!
+        glUniform1i(texCoordLoc, 0); //여기 0은 GL_TEXTURE0을 의미한다. 텍스처슬롯!
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, png->getTextureID());
 
-        auto tintLoc = glGetUniformLocation(frameworkInst->curRenderer->getProgramID(), "tintColor");
         if(isTintEnabled)
             glUniform3f(tintLoc, tintR,tintG,tintB);
         else

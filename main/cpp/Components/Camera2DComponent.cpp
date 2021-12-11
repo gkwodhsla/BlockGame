@@ -5,6 +5,10 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/ext.hpp>
 
+GLuint Camera2DComponent::cameraLoc = -1;
+GLuint Camera2DComponent::projLoc = -1;
+
+
 Camera2DComponent::Camera2DComponent(const float left, const float right, const float bottom,
                                      const float top, const glm::vec3 &eye, const glm::vec3 &at,
                                      const glm::vec3 &up, HActor* owner):
@@ -29,12 +33,16 @@ void Camera2DComponent::setProgramViewProjectionMat(GLuint programID)
     {
         cameraTransform = glm::lookAt(eye, glm::vec3{eye.x, eye.y, 0.0f}, up);
     }
-    auto cameraTransLoc = glGetUniformLocation(programID, "cameraTrans");
-    glUniformMatrix4fv(cameraTransLoc, 1, GL_FALSE, glm::value_ptr(cameraTransform));
+    if(cameraLoc == -1)
+    {
+        cameraLoc = glGetUniformLocation(programID, "cameraTrans");
+        projLoc = glGetUniformLocation(programID, "projTrans");
+    }
+    glUniformMatrix4fv(cameraLoc, 1, GL_FALSE, glm::value_ptr(cameraTransform));
 
     glm::mat4 projTransform = glm::ortho(left, right,bottom, top,1.0f,100.0f);
-    auto projTransLoc = glGetUniformLocation(programID, "projTrans");
-    glUniformMatrix4fv(projTransLoc, 1, GL_FALSE, glm::value_ptr(projTransform));
+
+    glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projTransform));
 }
 
 void Camera2DComponent::changeCameraInnerProperty(const float left, const float right,

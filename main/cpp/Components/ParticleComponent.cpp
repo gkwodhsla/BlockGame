@@ -3,6 +3,15 @@
 #include "../Common/Framework.h"
 #include "../Common/Renderer.h"
 
+GLuint ParticleComponent::isInstanceDrawLoc = -1;
+GLuint ParticleComponent::isRepeatLoc = -1;
+GLuint ParticleComponent::gTimeLoc = -1;
+GLuint ParticleComponent::uTexCoordLoc = -1;
+GLuint ParticleComponent::velLoc = -1;
+GLuint ParticleComponent::accLoc = -1;
+GLuint ParticleComponent::addPosLoc = -1;
+GLuint ParticleComponent::lifeTimeLoc = -1;
+
 const float ParticleComponent::rect[] =
         {
                 -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
@@ -15,6 +24,10 @@ const float ParticleComponent::rect[] =
 
 ParticleComponent::ParticleComponent(HActor *owner, int particleNum)
 {
+    if(isInstanceDrawLoc == -1)
+    {
+        setStaticData();
+    }
     this->particleNum = particleNum;
     setOwner(owner);
     glGenBuffers(1, &rectVBO);
@@ -43,6 +56,10 @@ ParticleComponent::ParticleComponent(const char *filePath, HActor *owner, const 
                                      const GLbitfield wrappingModeS,
                                      const GLbitfield wrappingModeT)
 {
+    if(isInstanceDrawLoc == -1)
+    {
+        setStaticData();
+    }
     particleImg = GlobalFunction::createNewObject<PNG>(filePath, isCreateMipmap, magFilter, minFilter, wrappingModeS, wrappingModeT);
     setOwner(owner);
     glGenBuffers(1, &rectVBO);
@@ -82,43 +99,35 @@ void ParticleComponent::render()
     {
         HPrimitiveComponent::render();
         auto programID=Framework::curRenderer->getProgramID();
-        auto isParticleLoc = glGetUniformLocation(programID, "isInstanceDraw");
         glUniform1i(isParticleLoc, true);
 
-        auto isRepeatLoc = glGetUniformLocation(programID, "isRepeat");
         glUniform1i(isRepeatLoc, isRepeat);
 
-        auto gTimeLoc = glGetUniformLocation(programID, "gTime");
         glUniform1f(gTimeLoc, accTime);
 
-        auto texLoc = glGetUniformLocation(programID, "uTexCoord");
-        glUniform1i(texLoc, 0); //여기 0은 GL_TEXTURE0을 의미한다. 텍스처슬롯!
+        glUniform1i(uTexCoordLoc, 0); //여기 0은 GL_TEXTURE0을 의미한다. 텍스처슬롯!
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, particleImg->getTextureID());
 
-        auto velLoc = glGetAttribLocation(programID, "vel");
         glEnableVertexAttribArray(velLoc);
         glBindBuffer(GL_ARRAY_BUFFER, velVBO);
         glVertexAttribPointer(velLoc, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (GLvoid*)0);
         glVertexAttribDivisor(velLoc, 1);
 
-        auto accLoc = glGetAttribLocation(programID, "acc");
         glEnableVertexAttribArray(accLoc);
         glBindBuffer(GL_ARRAY_BUFFER, accelVBO);
         glVertexAttribPointer(accLoc, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (GLvoid*)0);
         glVertexAttribDivisor(accLoc, 1);
 
-        auto posLoc = glGetAttribLocation(programID, "addPos");
-        glEnableVertexAttribArray(posLoc);
+        glEnableVertexAttribArray(addPosLoc);
         glBindBuffer(GL_ARRAY_BUFFER, posVBO);
-        glVertexAttribPointer(posLoc, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (GLvoid*)0);
-        glVertexAttribDivisor(posLoc, 1);
+        glVertexAttribPointer(addPosLoc, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (GLvoid*)0);
+        glVertexAttribDivisor(addPosLoc, 1);
 
-        auto lifeLoc = glGetAttribLocation(programID, "lifeTime");
-        glEnableVertexAttribArray(lifeLoc);
+        glEnableVertexAttribArray(lifeTimeLoc);
         glBindBuffer(GL_ARRAY_BUFFER, lifeTimeVBO);
-        glVertexAttribPointer(lifeLoc, 1, GL_FLOAT, GL_FALSE, sizeof(float) * 1, (GLvoid*)0);
-        glVertexAttribDivisor(lifeLoc, 1);
+        glVertexAttribPointer(lifeTimeLoc, 1, GL_FLOAT, GL_FALSE, sizeof(float) * 1, (GLvoid*)0);
+        glVertexAttribDivisor(lifeTimeLoc, 1);
 
         glDrawArraysInstanced(GL_TRIANGLES, 0, 6, particleNum);
     }
@@ -284,4 +293,17 @@ void ParticleComponent::setNewParticleData()
     delete[] posData;
     delete[] times;
 
+}
+
+void ParticleComponent::setStaticData()
+{
+    auto programID=Framework::curRenderer->getProgramID();
+    isInstanceDrawLoc = glGetUniformLocation(programID, "isInstanceDraw");
+    isRepeatLoc = glGetUniformLocation(programID, "isRepeat");
+    gTimeLoc = glGetUniformLocation(programID, "gTime");
+    uTexCoordLoc = glGetUniformLocation(programID, "uTexCoord");
+    velLoc = glGetAttribLocation(programID, "vel");
+    accLoc = glGetAttribLocation(programID, "acc");
+    addPosLoc = glGetAttribLocation(programID, "addPos");
+    lifeTimeLoc = glGetAttribLocation(programID, "lifeTime");
 }

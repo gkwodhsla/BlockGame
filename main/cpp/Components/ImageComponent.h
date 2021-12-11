@@ -52,6 +52,12 @@ public:
     void setTintEnabled(bool isEnabled);
     void setTintColor(const float r, const float g, const float b);
 
+protected:
+    static GLuint positionLoc;
+    static GLuint texPosLoc;
+    static GLuint texCoordLoc;
+    static GLuint tintLoc;
+
 private:
     GLuint VBO;
     static const float rect[];
