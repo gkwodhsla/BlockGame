@@ -72,11 +72,11 @@ void HLevelBase::update(const float deltaTime)
                 {
                     if(collisionObjects[j]->getOwner() == actor)
                     {
-                        for(int k = 0; k < (int)collisionObjects.size(); ++ k)
+                        for(int k = 0; k < (int)collisionObjects.size(); ++k)
                         {
-                            if(j != k && collisionObjects[j]->getOwner()->getVisibility())
+                            if(j != k && collisionObjects[k]->getOwner()->getVisibility())
                             {
-                                collisionObjects[i]->checkCollision(*collisionObjects[j]);
+                                collisionObjects[j]->checkCollision(*collisionObjects[k]);
                             }
                         }
                         break;
@@ -92,7 +92,7 @@ void HLevelBase::update(const float deltaTime)
         {
             for(int j = i + 1; j < (int)collisionObjects.size(); ++j)
             {
-                if(collisionObjects[j]->getOwner()->getVisibility())
+                if(collisionObjects[j]->getOwner()->getVisibility() && !collisionObjects[j]->getOwner()->getEnableSubstepping())
                 {
                     collisionObjects[i]->checkCollision(*collisionObjects[j]);
                 }

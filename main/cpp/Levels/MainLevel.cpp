@@ -50,13 +50,7 @@ void MainLevel::update(const float deltaTime)
         {
             isMsgTime = false;
             stageManager->setGameMap();
-            Ball* ball = GlobalFunction::Cast<Ball>(spawnActor<Ball>());
-            addBallCnt();
-            ball->setActorWorldScale(15.0f,15.0f);
-            ball->setActorWorldLocation(0.0f,-200.0f);
-            ball->setCollisionComp(8.0f);
-            ball->setEnableSubstepping(true);
-            ball->setSubsteppingNum(4);
+            spawnBall();
             board->setVisibility(false);
         }
         stageStartCoolTime -= deltaTime;
@@ -110,4 +104,15 @@ void MainLevel::clearGameWorld()
     board->changeContent(temp);
     board->setVisibility(true);
     ballCnt = 0;
+}
+
+void MainLevel::spawnBall()
+{
+    Ball* ball = GlobalFunction::Cast<Ball>(spawnActor<Ball>());
+    addBallCnt();
+    ball->setActorWorldScale(15.0f,15.0f);
+    ball->setActorWorldLocation(0.0f,-200.0f);
+    ball->setCollisionComp(8.0f);
+    ball->setEnableSubstepping(true);
+    ball->setSubsteppingNum(8);
 }

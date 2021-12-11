@@ -55,7 +55,7 @@ public class GLESView extends GLSurfaceView
     }
     private static long beginTime = SystemClock.elapsedRealtime();
     private static float deltaTime = 0.0f;
-    private static final float maxFPS = 1.0f / 60.0f;
+    private static final float maxFPS = 1.0f / 30.0f;
     private static class Renderer implements GLSurfaceView.Renderer
     {
         public void onDrawFrame(GL10 gl)

@@ -28,6 +28,7 @@ public:
             clearGameWorld();
         }
     }
+    void spawnBall();
 
 public:
     StageManager* stageManager = nullptr;

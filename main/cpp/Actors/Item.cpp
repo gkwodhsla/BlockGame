@@ -23,13 +23,7 @@ Item::Item(const whichItem& whatItem)
             {
                 if(GlobalFunction::Cast<Bouncer>(other))
                 {
-                    auto ball = GlobalFunction::getLevel()->spawnActor<Ball>();
-                    GlobalFunction::Cast<MainLevel>(GlobalFunction::getLevel())->addBallCnt();
-                    ball->setActorWorldScale(15.0f,15.0f);
-                    ball->setActorWorldLocation(0.0f,-100.0f);
-                    ball->setCollisionComp(8.0f);
-                    ball->setEnableSubstepping(true);
-                    ball->setSubsteppingNum(4);
+                    GlobalFunction::Cast<MainLevel>(GlobalFunction::getLevel())->spawnBall();
                     this->destroyAction();
                 }
             });
