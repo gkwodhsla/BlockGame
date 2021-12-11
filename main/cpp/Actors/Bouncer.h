@@ -28,6 +28,8 @@ private:
     static const float maxRotDeg;
     static constexpr float animSpeed = 60.0f;
     static constexpr float barSizeDelta = 60.0f;
+    static constexpr float minBarPos = -400.0f;
+    static constexpr float maxBarPos = 400.0f;
     float targetSize = 0.0f;
     enum class barState
     {

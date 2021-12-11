@@ -2,6 +2,7 @@
 #include "Ball.h"
 #include "../Components/ImageComponent.h"
 #include "../Components/BoxCollisionComponent.h"
+#include "../Common/Framework.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
@@ -109,10 +110,21 @@ void Bouncer::handleEvent(const Event &e)
         {
             float curX = e.xPos - befPos.first;
             //float curY = e.yPos - befPos.second;
-            curX*=400.0f;
+            curX*=frameworkInst->rendererSize / 2.0f;
             //curY*=400.0f;
             auto curWorldLoc = getActorWorldLocation();
-            setActorWorldLocation(curWorldLoc.first+curX, curWorldLoc.second);
+            if(curWorldLoc.first >= minBarPos && curWorldLoc.first<=maxBarPos)
+            {
+                setActorWorldLocation(curWorldLoc.first + curX, curWorldLoc.second);
+            }
+            else if(curWorldLoc.first < minBarPos && curX > 0.0f)
+            {
+                setActorWorldLocation(curWorldLoc.first + curX, curWorldLoc.second);
+            }
+            else if(curWorldLoc.first > maxBarPos && curX < 0.0f)
+            {
+                setActorWorldLocation(curWorldLoc.first + curX, curWorldLoc.second);
+            }
             befPos.first = e.xPos;
             befPos.second = e.yPos;
             break;

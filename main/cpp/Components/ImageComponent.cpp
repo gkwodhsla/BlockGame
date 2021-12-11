@@ -91,8 +91,6 @@ void ImageComponent::render()
     if(png)
     {
         HPrimitiveComponent::render();
-        glUniform1i(texCoordLoc, 0); //여기 0은 GL_TEXTURE0을 의미한다. 텍스처슬롯!
-        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, png->getTextureID());
 
         if(isTintEnabled)

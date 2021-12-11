@@ -105,29 +105,11 @@ void ParticleComponent::render()
 
         glUniform1f(gTimeLoc, accTime);
 
-        glUniform1i(uTexCoordLoc, 0); //여기 0은 GL_TEXTURE0을 의미한다. 텍스처슬롯!
-        glActiveTexture(GL_TEXTURE0);
+        //glUniform1i(uTexCoordLoc, 0); //여기 0은 GL_TEXTURE0을 의미한다. 텍스처슬롯!
+        //glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, particleImg->getTextureID());
 
-        glEnableVertexAttribArray(velLoc);
-        glBindBuffer(GL_ARRAY_BUFFER, velVBO);
-        glVertexAttribPointer(velLoc, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (GLvoid*)0);
-        glVertexAttribDivisor(velLoc, 1);
 
-        glEnableVertexAttribArray(accLoc);
-        glBindBuffer(GL_ARRAY_BUFFER, accelVBO);
-        glVertexAttribPointer(accLoc, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (GLvoid*)0);
-        glVertexAttribDivisor(accLoc, 1);
-
-        glEnableVertexAttribArray(addPosLoc);
-        glBindBuffer(GL_ARRAY_BUFFER, posVBO);
-        glVertexAttribPointer(addPosLoc, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (GLvoid*)0);
-        glVertexAttribDivisor(addPosLoc, 1);
-
-        glEnableVertexAttribArray(lifeTimeLoc);
-        glBindBuffer(GL_ARRAY_BUFFER, lifeTimeVBO);
-        glVertexAttribPointer(lifeTimeLoc, 1, GL_FLOAT, GL_FALSE, sizeof(float) * 1, (GLvoid*)0);
-        glVertexAttribDivisor(lifeTimeLoc, 1);
 
         glDrawArraysInstanced(GL_TRIANGLES, 0, 6, particleNum);
     }
@@ -286,6 +268,26 @@ void ParticleComponent::setNewParticleData()
                                  GL_MAP_WRITE_BIT|GL_MAP_INVALIDATE_BUFFER_BIT);
     memcpy(ptr, times, sizeof(float)*particleNum);
     glUnmapBuffer(GL_ARRAY_BUFFER);
+
+    glEnableVertexAttribArray(velLoc);
+    glBindBuffer(GL_ARRAY_BUFFER, velVBO);
+    glVertexAttribPointer(velLoc, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (GLvoid*)0);
+    glVertexAttribDivisor(velLoc, 1);
+
+    glEnableVertexAttribArray(accLoc);
+    glBindBuffer(GL_ARRAY_BUFFER, accelVBO);
+    glVertexAttribPointer(accLoc, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (GLvoid*)0);
+    glVertexAttribDivisor(accLoc, 1);
+
+    glEnableVertexAttribArray(addPosLoc);
+    glBindBuffer(GL_ARRAY_BUFFER, posVBO);
+    glVertexAttribPointer(addPosLoc, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (GLvoid*)0);
+    glVertexAttribDivisor(addPosLoc, 1);
+
+    glEnableVertexAttribArray(lifeTimeLoc);
+    glBindBuffer(GL_ARRAY_BUFFER, lifeTimeVBO);
+    glVertexAttribPointer(lifeTimeLoc, 1, GL_FLOAT, GL_FALSE, sizeof(float) * 1, (GLvoid*)0);
+    glVertexAttribDivisor(lifeTimeLoc, 1);
 
     ptr = nullptr;
     delete[] velData;
