@@ -17,7 +17,6 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/ext.hpp>
 #include <chrono>
-
 AAssetManager* Framework::assetMng = nullptr;
 Framework* Framework::instance = nullptr;
 Renderer* Framework::curRenderer = nullptr;
@@ -30,7 +29,6 @@ float Framework::deltaTime= 0.0f;
 bool Framework::isGamePlaying = true;
 
 Framework* frameworkInst = nullptr;
-
 
 Framework::~Framework()
 {
@@ -62,6 +60,29 @@ Framework *Framework::getInstance()
     return instance;
 }
 
+class MyCallback:public oboe::AudioStreamDataCallback
+{
+public:
+    oboe::DataCallbackResult
+    onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames) {
+
+        // We requested AudioFormat::Float. So if the stream opens
+        // we know we got the Float format.
+        // If you do not specify a format then you should check what format
+        // the stream has and cast to the appropriate type.
+        auto *outputData = static_cast<float *>(audioData);
+
+        // Generate random numbers (white noise) centered around zero.
+        const float amplitude = 0.2f;
+        for (int i = 0; i < numFrames; ++i){
+            outputData[i] = ((float)drand48() - 0.5f) * 2 * amplitude;
+        }
+
+        return oboe::DataCallbackResult::Continue;
+    }
+};
+MyCallback myCallback;
+std::shared_ptr<oboe::AudioStream> mStream;
 void Framework::init(const char* VSPath, const char* FSPath)
 {
     curRenderer = new Renderer(VSPath, FSPath);
@@ -72,6 +93,18 @@ void Framework::init(const char* VSPath, const char* FSPath)
     curRenderer->setClearColor(0.0f,0.0f,0.0f,0.0f);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    oboe::AudioStreamBuilder builder;
+    builder.setDirection(oboe::Direction::Output);
+    builder.setPerformanceMode(oboe::PerformanceMode::LowLatency);
+    builder.setSharingMode(oboe::SharingMode::Exclusive);
+    builder.setFormat(oboe::AudioFormat::Float);
+    builder.setChannelCount(oboe::ChannelCount::Mono);
+    builder.setDataCallback(&myCallback);
+    oboe::Result result = builder.openStream(mStream);
+    if (result != oboe::Result::OK) {
+        PRINT_LOG(oboe::convertToText(result), %s)
+    }
+    mStream->start();
     curLevel = GlobalFunction::createNewObject<MainLevel>();
     curLevel->enterGameWorld();
     eventQ = EventQ::getInstance();
@@ -153,7 +186,7 @@ Java_com_example_blockgame_GLESNativeLib_draw(JNIEnv* env, jobject obj, float de
         frameworkInst->render();
         Framework::deltaTime = deltaTime;
         Framework::accTime += deltaTime;
-        PRINT_LOG(1.0f/deltaTime, %f)
+        //PRINT_LOG(1.0f/deltaTime, %f)
     }
 }
 

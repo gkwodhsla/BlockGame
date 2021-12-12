@@ -4,6 +4,10 @@
 #include <cstdlib>
 #include <random>
 
+#if defined(__ANDROID__) || defined(ANDROID)
+#include "../oboe-main/include/oboe/Oboe.h"
+#endif
+
 #define PRINT_LOG(str, type) \
 __android_log_print(ANDROID_LOG_INFO, "gles log" ,#type, str);
 
