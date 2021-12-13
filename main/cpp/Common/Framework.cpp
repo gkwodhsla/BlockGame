@@ -17,6 +17,13 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/ext.hpp>
 #include <chrono>
+
+#include "../parselib/stream/MemInputStream.h"
+#include "../parselib/wav/WavStreamReader.h"
+
+#include "../iolib/player/OneShotSampleSource.h"
+#include "../iolib/player/SimpleMultiPlayer.h"
+
 AAssetManager* Framework::assetMng = nullptr;
 Framework* Framework::instance = nullptr;
 Renderer* Framework::curRenderer = nullptr;
@@ -83,6 +90,26 @@ public:
 };
 MyCallback myCallback;
 std::shared_ptr<oboe::AudioStream> mStream;
+static iolib::SimpleMultiPlayer sDTPlayer;
+
+void buildAudioFile(const char* fileName)
+{
+    size_t fileSize = 0;
+    auto buffer = GlobalFunction::readFile(fileName, fileSize);
+    parselib::MemInputStream stream((unsigned char*)buffer, fileSize);
+    parselib::WavStreamReader reader(&stream);
+    reader.parse();
+    if(reader.getNumChannels() != 1)
+    {
+        PRINT_LOG("parse wav failed", %s)
+    }
+    iolib::SampleBuffer* sampleBuffer = new iolib::SampleBuffer();
+    sampleBuffer->loadSampleData(&reader);
+
+    iolib::OneShotSampleSource* source = new iolib::OneShotSampleSource(sampleBuffer, 0.0f);
+    sDTPlayer.addSampleSource(source, sampleBuffer);
+    delete[] buffer;
+}
 void Framework::init(const char* VSPath, const char* FSPath)
 {
     curRenderer = new Renderer(VSPath, FSPath);
@@ -93,7 +120,7 @@ void Framework::init(const char* VSPath, const char* FSPath)
     curRenderer->setClearColor(0.0f,0.0f,0.0f,0.0f);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    oboe::AudioStreamBuilder builder;
+    /*oboe::AudioStreamBuilder builder;
     builder.setDirection(oboe::Direction::Output);
     builder.setPerformanceMode(oboe::PerformanceMode::LowLatency);
     builder.setSharingMode(oboe::SharingMode::Exclusive);
@@ -105,9 +132,18 @@ void Framework::init(const char* VSPath, const char* FSPath)
         PRINT_LOG(oboe::convertToText(result), %s)
     }
     mStream->start();
+     */
     curLevel = GlobalFunction::createNewObject<MainLevel>();
     curLevel->enterGameWorld();
     eventQ = EventQ::getInstance();
+
+    sDTPlayer.setupAudioStream(2);
+
+    buildAudioFile("audio/breakout.wav");
+    buildAudioFile("audio/bounce.wav");
+
+    sDTPlayer.triggerDown(0);
+    sDTPlayer.startStream();
 }
 
 void Framework::handleEvent()
@@ -117,7 +153,7 @@ void Framework::handleEvent()
         curLevel->handleEvent(*eventQ->pollEvent());
     }
 }
-
+float tempTime = 0.0f;
 void Framework::update(const float deltaTime)
 {
     curLevel->update(deltaTime);

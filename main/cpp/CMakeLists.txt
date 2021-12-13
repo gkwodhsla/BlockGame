@@ -19,6 +19,8 @@ set(OPENGL_LIB GLESv3) #버전3만 지원
 add_subdirectory(glm-master) #재귀적으로 CMakeLists 사용
 add_subdirectory(freetype)
 add_subdirectory(oboe-main)
+add_subdirectory(parselib)
+add_subdirectory(iolib)
 
 add_library(gles3jni SHARED
         Actors/HActor.cpp
@@ -60,6 +62,8 @@ target_link_libraries(gles3jni
         glm
         freetype
         oboe
+        parselib
+        iolib
         android
         EGL
         log
