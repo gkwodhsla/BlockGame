@@ -51,6 +51,7 @@ add_library(gles3jni SHARED
         Components/MovementComponent.cpp
         Components/TTFComponent.cpp
         Components/ParticleComponent.cpp
+        Components/WAVPlayerComponent.cpp
         Controllers/HPlayerController.cpp
         Levels/HLevelBase.cpp
         Levels/MainLevel.cpp

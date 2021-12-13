@@ -5,6 +5,7 @@ class CircleCollisionComponent;
 class ImageComponent;
 class MovementComponent;
 class ParticleComponent;
+class WAVPlayerComponent;
 class Ball: public HActor
 {
 public:
@@ -30,6 +31,7 @@ private:
     ImageComponent* ballImg = nullptr;
     CircleCollisionComponent* collisionComp = nullptr;
     MovementComponent* ballMovement = nullptr;
+    WAVPlayerComponent* ballHitWav = nullptr;
     static const float ballSpeed;
     static const float deadLine;
     bool isDirVecChangedRecently = false;

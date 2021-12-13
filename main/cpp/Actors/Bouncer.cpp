@@ -2,6 +2,7 @@
 #include "Ball.h"
 #include "../Components/ImageComponent.h"
 #include "../Components/BoxCollisionComponent.h"
+#include "../Components/WAVPlayerComponent.h"
 #include "../Common/Framework.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
@@ -23,6 +24,7 @@ Bouncer::Bouncer()
                                                             auto ball = GlobalFunction::Cast<Ball>(other);
                                                             if(ball)
                                                             {
+                                                                ballHitSound->play();
                                                                 auto ballLoc = ball->getActorWorldLocation();
                                                                 auto bouncerLoc = getActorWorldLocation();
                                                                 auto middleDir = getActorDirectionalVector();
@@ -47,6 +49,8 @@ Bouncer::Bouncer()
                                                                 }
                                                             }
                                                      });
+    ballHitSound = createComponent<WAVPlayerComponent>("audio/bleepPlatform.wav", this);
+    ballHitSound->attachTo(rootComponent);
 }
 
 Bouncer::~Bouncer()

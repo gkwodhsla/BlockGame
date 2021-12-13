@@ -4,6 +4,7 @@
 class ImageComponent;
 class BoxCollisionComponent;
 class CircleCollisionComponent;
+class WAVPlayerComponent;
 
 class Bouncer: public HPawn
 {
@@ -23,6 +24,7 @@ public:
 private:
     ImageComponent* bouncerImage = nullptr;
     BoxCollisionComponent* boxCollisionComponent = nullptr;
+    WAVPlayerComponent* ballHitSound = nullptr;
 
     std::pair<float, float> befPos{0.0f, 0.0f};
     static const float maxRotDeg;

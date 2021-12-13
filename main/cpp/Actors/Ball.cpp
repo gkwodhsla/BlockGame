@@ -3,6 +3,7 @@
 #include "../Components/CircleCollisionComponent.h"
 #include "../Components/MovementComponent.h"
 #include "../Components/ParticleComponent.h"
+#include "../Components/WAVPlayerComponent.h"
 #include "../Levels/MainLevel.h"
 #include "../Actors/Item.h"
 #include "../Actors/BreakableBrick.h"
@@ -22,6 +23,10 @@ Ball::Ball()
     {
         auto level = GlobalFunction::Cast<MainLevel>(GlobalFunction::getLevel());
         auto block = GlobalFunction::Cast<BreakableBrick>(other);
+        if(block)
+        {
+            ballHitWav->play();
+        }
         if(level && block && GlobalFunction::generateRandomBool(0.2f)) //20%확률로 아이템을 생성한다.
         {
             int which = GlobalFunction::generateRandomInt(0, 2);
@@ -36,6 +41,9 @@ Ball::Ball()
     ballMovement->setMaxSpeed(ballSpeed);
     ballMovement->setDeltaAccel(100.0f);
     this->setActorDirectionalVector(glm::vec2(0.0f,-1.0f));
+
+    ballHitWav = createComponent<WAVPlayerComponent>("audio/bleepWall.wav", this);
+    ballHitWav->attachTo(rootComponent);
 
     /*ballParticle = createComponent<ParticleComponent>("images/ballParticle.png", this, true,
                                                       GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR, GL_REPEAT, GL_REPEAT);

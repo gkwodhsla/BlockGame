@@ -3,6 +3,7 @@
 #include "../Components/ImageComponent.h"
 #include "../Components/BoxCollisionComponent.h"
 #include "../Components/MovementComponent.h"
+#include "../Components/WAVPlayerComponent.h"
 #include "../Levels/MainLevel.h"
 #include "Bouncer.h"
 #include "Ball.h"
@@ -24,6 +25,7 @@ Item::Item(const whichItem& whatItem)
                 if(GlobalFunction::Cast<Bouncer>(other))
                 {
                     GlobalFunction::Cast<MainLevel>(GlobalFunction::getLevel())->spawnBall();
+                    itemWAV->play();
                     this->destroyAction();
                 }
             });
@@ -36,6 +38,7 @@ Item::Item(const whichItem& whatItem)
                 if(bouncer)
                 {
                     bouncer->beginExpandingBar();
+                    itemWAV->play();
                     this->destroyAction();
                 }
             });
@@ -48,12 +51,15 @@ Item::Item(const whichItem& whatItem)
                 if(bouncer)
                 {
                     bouncer->beginShrinkingBar();
+                    itemWAV->play();
                     this->destroyAction();
                 }
             });
             break;
     }
     itemImg->attachTo(rootComponent);
+    itemWAV = createComponent<WAVPlayerComponent>("audio/powerup.wav", this);
+    itemWAV->attachTo(rootComponent);
 }
 
 Item::~Item()

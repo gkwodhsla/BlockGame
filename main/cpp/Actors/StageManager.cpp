@@ -2,6 +2,7 @@
 #include "BreakableBrick.h"
 #include "../Common/Common.h"
 #include "../Levels/MainLevel.h"
+#include "../Components/WAVPlayerComponent.h"
 #include <string>
 #include <iterator>
 #include <sstream>
@@ -23,6 +24,11 @@ StageManager::StageManager(): brickPool(mapSize*mapSize)
         std::string temp{std::istream_iterator<char>(ss), {}};
         mapData[i].assign(temp.begin(), temp.end());
     }
+
+    WAVPlayerComponent* bgWav = createComponent<WAVPlayerComponent>("audio/breakout.wav", this);
+    bgWav->attachTo(rootComponent);
+    bgWav->setLooping(true);
+    bgWav->play();
 }
 
 StageManager::~StageManager()

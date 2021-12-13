@@ -4,6 +4,7 @@
 #include <vector>
 
 class BreakableBrick;
+class WAVPlayerComponent;
 
 class StageManager: public HActor
 {
@@ -33,4 +34,5 @@ private:
     size_t curStage = 0;
     ActorObjectPool<BreakableBrick> brickPool;
     std::vector<std::vector<char>> mapData;
+    WAVPlayerComponent* bgWav = nullptr;
 };

@@ -4,6 +4,7 @@
 class ImageComponent;
 class BoxCollisionComponent;
 class MovementComponent;
+class WAVPlayerComponent;
 
 enum class whichItem
 {
@@ -27,7 +28,7 @@ public:
 
 public:
     BoxCollisionComponent* collisionComp = nullptr;
-
+    WAVPlayerComponent* itemWAV = nullptr;
 private:
     ImageComponent* itemImg = nullptr;
     MovementComponent* moveComp = nullptr;
