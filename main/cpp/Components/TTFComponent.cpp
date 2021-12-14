@@ -1,8 +1,6 @@
 #include "TTFComponent.h"
 #include "../Common/Framework.h"
 #include "../Common/Renderer.h"
-#include <android/asset_manager.h>
-#include <android/asset_manager_jni.h>
 
 float TTFComponent::rect[] =
         {

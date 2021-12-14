@@ -2,8 +2,6 @@
 #include "../Common/Framework.h"
 #include "../Common/Renderer.h"
 
-#include <android/asset_manager.h>
-#include <android/asset_manager_jni.h>
 #include <cstring>
 
 GLuint ImageComponent::positionLoc = -1;

@@ -5,10 +5,6 @@
 #include "../Actors/HActor.h"
 #include "../Levels/MainLevel.h"
 
-#include <GLES3/gl3.h>
-#include <jni.h>
-#include <android/asset_manager.h>
-#include <android/asset_manager_jni.h>
 #include <cstring>
 #include <string>
 #include <vector>
@@ -18,12 +14,19 @@
 #include <glm/ext.hpp>
 #include <chrono>
 
+
+#if defined(__ANDROID__) || defined(ANDROID)
+#include <GLES3/gl3.h>
+#include <jni.h>
+#include <android/asset_manager.h>
+#include <android/asset_manager_jni.h>
 #include "../parselib/stream/MemInputStream.h"
 #include "../parselib/wav/WavStreamReader.h"
-
 #include "../iolib/player/OneShotSampleSource.h"
 #include "../iolib/player/SimpleMultiPlayer.h"
-
+#elif defined(IOS)
+#include <OpenGLES/ES3/gl.h>
+#endif
 AAssetManager* Framework::assetMng = nullptr;
 Framework* Framework::instance = nullptr;
 Renderer* Framework::curRenderer = nullptr;
@@ -117,6 +120,7 @@ Framework::Framework()
 
 }
 
+#if defined(__ANDROID__) || defined(ANDROID)
 extern "C"
 {
 JNIEXPORT void JNICALL Java_com_example_blockgame_GLESNativeLib_init(JNIEnv* env, jobject obj);
@@ -205,3 +209,33 @@ Java_com_example_blockgame_GLESNativeLib_resume(JNIEnv *env, jobject obj)
     frameworkInst->isGamePlaying = true;
     PRINT_LOG("resume", %s)
 }
+#elif defined(IOS)
+void initGame()
+{
+    frameworkInst = Framework::getInstance();
+    frameworkInst->init("textureVertex.vs", "textureFrag.fs");
+}
+void render(float deltaTime)
+{
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+void touchEventStart(float x, float y)
+{
+    Framework::conversionCoordToGLCoordSystem(x, y);
+    Event newEvent(EVENT_TYPE::FINGER_DOWN, x, y);
+    frameworkInst->eventQ->pushEvent(newEvent);
+}
+void touchEventMove(float x, float y)
+{
+    Framework::conversionCoordToGLCoordSystem(x, y);
+    Event newEvent(EVENT_TYPE::FINGER_SWIPE, x, y);
+    frameworkInst->eventQ->pushEvent(newEvent);
+}
+void touchEventRelease(float x, float y)
+{
+    Framework::conversionCoordToGLCoordSystem(x, y);
+    Event newEvent(EVENT_TYPE::FINGER_UP, x, y);
+    frameworkInst->eventQ->pushEvent(newEvent);
+}
+#endif

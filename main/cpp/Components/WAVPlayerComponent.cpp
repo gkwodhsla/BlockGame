@@ -1,6 +1,7 @@
 #include "WAVPlayerComponent.h"
 #include "../Actors/HActor.h"
 
+#if defined(__ANDROID__) || defined(ANDROID)
 int WAVPlayerComponent::globalIndex = 0;
 bool WAVPlayerComponent::isSetsDTPlayer = false;
 iolib::SimpleMultiPlayer WAVPlayerComponent::sDTPlayer;
@@ -67,3 +68,4 @@ void WAVPlayerComponent::loadWav(const char *filePath)
     sDTPlayer.addSampleSource(source, sampleBuffer);
     delete[] buffer;
 }
+#endif

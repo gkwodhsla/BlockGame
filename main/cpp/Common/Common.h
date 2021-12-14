@@ -1,15 +1,17 @@
 #pragma once
 
-#include <android/log.h>
-#include <cstdlib>
-#include <random>
-
 #if defined(__ANDROID__) || defined(ANDROID)
+#include <android/log.h>
 #include "../oboe-main/include/oboe/Oboe.h"
-#endif
-
 #define PRINT_LOG(str, type) \
 __android_log_print(ANDROID_LOG_INFO, "gles log" ,#type, str);
+#elif defined(IOS)
+#import<UIKit/UIKit.h>
+NSLog(@#type, str);
+#endif
+
+#include <cstdlib>
+#include <random>
 
 class HLevelBase;
 

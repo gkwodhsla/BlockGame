@@ -1,5 +1,7 @@
 #pragma once
 #include "HSceneComponent.h"
+
+#if defined(__ANDROID__) || defined(ANDROID)
 #include "../parselib/stream/MemInputStream.h"
 #include "../parselib/wav/WavStreamReader.h"
 #include "../iolib/player/OneShotSampleSource.h"
@@ -35,3 +37,4 @@ private:
     static bool isSetsDTPlayer;
     static iolib::SimpleMultiPlayer sDTPlayer;
 };
+#endif

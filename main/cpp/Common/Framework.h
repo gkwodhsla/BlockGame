@@ -1,6 +1,10 @@
 #pragma once
 
+#if defined(__ANDROID__) || (ANDROID)
 #include <GLES3/gl3.h>
+#elif defined(IOS)
+#include <OpenGLES/ES3/gl.h>
+#endif
 #include "lodepng/lodepng.h"
 
 class Renderer;

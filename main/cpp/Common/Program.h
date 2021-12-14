@@ -1,6 +1,9 @@
 #pragma once
+#if defined(__ANDROID__) || defined(ANDROID)
 #include <GLES3/gl3.h>
-
+#elif defined(IOS)
+#include <OpenGLES/ES3/gl.h>
+#endif
 class Program
 {
 public:

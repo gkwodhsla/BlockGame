@@ -2,7 +2,6 @@
 
 #include <queue>
 #include <type_traits>
-#include <android/log.h>
 #include <functional>
 #include <exception>
 #include "Framework.h"
